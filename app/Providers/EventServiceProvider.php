@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\ForgotPassword;
+use App\Events\SendSellerOTP;
+use App\Listeners\ForgotPasswordMail;
+use App\Listeners\SellerRegistrationMail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +22,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        ForgotPassword::class => [
+            ForgotPasswordMail::class
+        ],
+        SendSellerOTP::class => [
+            SellerRegistrationMail::class
+        ]
     ];
 
     /**
