@@ -21,4 +21,10 @@ class Seller extends Model
     {
         return $this->hasMany(SellerBusinessAccount::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

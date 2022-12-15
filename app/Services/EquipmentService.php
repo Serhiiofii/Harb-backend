@@ -21,6 +21,7 @@ class EquipmentService
     {
         try {
             $data['user_id'] = auth()->user()->id;
+            $data['seller_id'] = auth()->user()->id;
             $equipment = Equipment::create($data);
             if ($request->hasFile('images')) {
                 $imagedata = $this->saveImages($request->file()['images'], $equipment->id);
@@ -35,6 +36,7 @@ class EquipmentService
     public function addCustomSpecification(array $data)
     {
         try {
+            $data['user_id'] = auth()->user()->id;
             $customSpecification = EquipmentCustomSpecification::create($data);
             return $this->success('success', 'Equipment added successfully', $customSpecification->load('equipment'), 201);
         } catch (\Throwable $e) {
@@ -49,6 +51,7 @@ class EquipmentService
             $img = $this->saveFile($loadImage);
             $tempArr = [];
             $tempArr['equipment_id'] = $id;
+            $tempArr['user_id'] = auth()->user()->id;
             $tempArr['image'] = $img;
             $imageArray[] = $tempArr;
         }

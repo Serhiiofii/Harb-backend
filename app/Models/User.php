@@ -56,6 +56,18 @@ class User extends Authenticatable
         $this->attributes['password'] = Hash::make($password);
     }
 
+    public function seller()
+    {
+        return $this->hasOne(Seller::class);
+    }
+
+    public function sellerDocuments()
+    {
+        return $this->hasManyThrough(SellerDocument::class, Seller::class);
+    }
+
+
+
     // public function tokens()
     // {
     //     return $this->morphMany(Sanctum::$personalAccessTokenModel, 'tokenable', "tokenable_type", "tokenable_id");

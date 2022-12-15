@@ -8,6 +8,7 @@ use App\Models\EquipmentCustomSpecification;
 use App\Models\EquipmentImage;
 use App\Models\Seller;
 use App\Models\SellerDocument;
+use App\Models\Service;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use App\Traits\SaveImage;
@@ -21,7 +22,7 @@ class AccountService
     {
         try {
             $userAccounts = User::all();
-            return $this->success('success', 'Accounts retrieved successfully', $userAccounts,200);
+            return $this->success('success', 'Accounts retrieved2 successfully', $userAccounts,200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
@@ -30,17 +31,18 @@ class AccountService
     public function viewUser($id)
     {
         try {
-            $user = User::where('id', $id)->first();
+            $user = User::where('id', $id)->first()->load('seller', 'sellerDocuments');
             if($user == null) {
                 return $this->error('error','Account not found',null,400);
             }
-
-            return $this->success('success', 'Account retrieved successfully', $user, 200);
+            $sellerEquipments = Equipment::where('seller_id',auth()->user()->id)->with('equipmentImages', 'customSpecifications')->get();
+            $services = Service::where('seller_id',auth()->user()->id)->orWhere('user_id',auth()->user()->id)->get();
+            return $this->success('success', 'Account retrieved successfully', ['user' => $user, 'equipments' => $sellerEquipments, 'services' => $services], 200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
     }
-
+ 
     public function searchUser($data)
     {
         try {

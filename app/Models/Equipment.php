@@ -16,6 +16,10 @@ class Equipment extends Model
     {
         return $this->hasMany(EquipmentImage::class);
     }
+    public function customSpecifications()
+    {
+        return $this->hasMany(EquipmentCustomSpecification::class);
+    }
 
 
 }

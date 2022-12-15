@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
+            $table->uuid('seller_id')->index();
             $table->string('name');
             $table->string('category');
             $table->string('description');

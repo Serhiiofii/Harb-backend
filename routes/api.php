@@ -45,8 +45,8 @@ Route::prefix('v1')->group(function(){
                 Route::get('users/{id}', 'viewUser');
                 Route::delete('users/{id}', 'deleteUser');
             });
-            
         });
+        // middleware('isAdmin')->
     });
     
 });

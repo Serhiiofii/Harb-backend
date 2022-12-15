@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('equipment_custom_specifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->uuid('user_id')->index();
             $table->uuid('equipment_id')->index();
             $table->string('title');
             $table->string('details');

@@ -61,11 +61,11 @@ class SellerService
             ]);
 
             if ($request->hasFile('business_documents')) {
-                $imagedata = $this->sellerDocumentService->saveImages($request->file()['business_documents'], $seller->id);
+                $imagedata = $this->sellerDocumentService->saveImages($request->file()['business_documents'], $seller->id, auth()->user()->id);
                 $loadedImages = $seller->businessDocuments()->createMany($imagedata);
             }
 
-            auth()->user()->update(['otp' => null]);
+            auth()->user()->update(['otp' => null, 'user_role' => 'seller']);
             return $this->success('success', 'Seller account created successfully', ['seller' => $seller, 'seller_documents' => $loadedImages], 201);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
@@ -82,6 +82,7 @@ class SellerService
 
             $accountDetails = SellerBusinessAccount::create([
                 'seller_id' => $data['seller_id'],
+                'user_id' => auth()->user()->id,
                 'account_name' => $data['account_name'],
                 'account_number' => $data['account_number'],
                 'bank_name' => $data['bank_name'],

@@ -14,13 +14,14 @@ class SellerDocumentService
 {
     use ApiResponse, SaveImage;
 
-    public function saveImages(array $data, string $sellerId)
+    public function saveImages(array $data, string $sellerId, string $userId)
     {
         $imageArray = [];
         foreach ($data as $docImage) {
             $img = $this->saveFile($docImage);
             $tempArr = [];
             $tempArr['seller_id'] = $sellerId;
+            $tempArr['user_id'] = $userId;
             $tempArr['document'] = $img;
             $imageArray[] = $tempArr;
         }

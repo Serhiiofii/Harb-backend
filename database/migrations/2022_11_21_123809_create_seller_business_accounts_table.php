@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('seller_business_accounts', function (Blueprint $table) {
             $table->uuid('id');
+            $table->uuid('user_id')->index();
             $table->uuid('seller_id')->index();
             $table->string('account_name');
             $table->string('account_number');

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('seller_documents', function (Blueprint $table) {
             $table->uuid('id');
+            $table->uuid('user_id')->index();
             $table->uuid('seller_id')->index();
             $table->string('document');
             $table->timestamps();
