@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('location')->nullable();
             $table->string('delivery_address')->nullable();
 
+            $table->string('user_role')->default('user');//'user' or 'seller' or 'admin'
+
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

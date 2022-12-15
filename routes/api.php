@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountsController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\SellerController;
 use App\Http\Controllers\User\UserController;
@@ -31,6 +32,20 @@ Route::prefix('v1')->group(function(){
             Route::post('request-otp', 'getRegistrationCode');
             Route::post('register', 'becomeASeller');
             Route::post('account-details', 'setupAccountDetails');
+            Route::post('equipments/add', 'addEquipment');
+            Route::post('services/add', 'addService');
+            Route::post('equipments/custom-specification', 'addCustomSpecification');
+        });
+
+
+        Route::prefix('admin')->group(function () {
+            Route::controller(AccountsController::class)->group(function(){
+                Route::get('users', 'listUsers');
+                Route::post('users/search', 'searchUser');
+                Route::get('users/{id}', 'viewUser');
+                Route::delete('users/{id}', 'deleteUser');
+            });
+            
         });
     });
     

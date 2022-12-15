@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Equipment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterRequest extends FormRequest
+class CustomSpecRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,9 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'bail|required',
-            'last_name' => 'bail|required',
-            'email' => 'bail|required|unique:users',
-            'phone' => 'bail|required|unique:users',
-            'password' => 'bail|required|confirmed',
+            'equipment_id' => 'bail|required|string',
+            'title' => 'bail|required|string|unique:equipment_custom_specifications',
+            'details' => 'bail|required|string|max:255',
         ];
     }
 }

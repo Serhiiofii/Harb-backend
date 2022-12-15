@@ -4,17 +4,26 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BecomeSellerRequest;
+use App\Http\Requests\Equipment\AddRequest;
+use App\Http\Requests\Equipment\CustomSpecRequest;
 use App\Http\Requests\SellerAccountRequest;
+use App\Http\Requests\Services\AddServiceRequest;
+use App\Services\EquipmentService;
 use App\Services\SellerService;
+use App\Services\SellerServiceService;
 use Illuminate\Http\Request;
 
 class SellerController extends Controller
 {
     protected $sellerService;
+    protected $equipmentService;
+    protected $serviceService;
 
-    public function __construct(SellerService $sellerService)
+    public function __construct(SellerService $sellerService, EquipmentService $equipmentService, SellerServiceService $serviceService)
     {
         $this->sellerService = $sellerService;
+        $this->equipmentService = $equipmentService;
+        $this->serviceService = $serviceService;
     }
 
     public function getRegistrationCode(Request $request)
@@ -34,6 +43,24 @@ class SellerController extends Controller
     {
         return $this->sellerService->setupAccountDetails($request->validated());
     }
+
+    public function addEquipment(AddRequest $request)
+    {
+        return $this->equipmentService->addEquipment($request->validated(), $request);
+    }
+
+    public function addCustomSpecification(CustomSpecRequest $request)
+    {
+        return $this->equipmentService->addCustomSpecification($request->validated());
+    }
+
+    public function addService(AddServiceRequest $request)
+    {
+        return $this->serviceService->addService($request->validated());
+    }
+    
+
+
 
     
 }

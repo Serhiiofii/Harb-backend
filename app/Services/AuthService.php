@@ -15,6 +15,7 @@ class AuthService
     public function createAccount(array $data)
     {
         try {
+            
             $user = User::create($data);
             return $this->success('success', 'Account created successfully', $user, 201);
         } catch (\Exception $e) {

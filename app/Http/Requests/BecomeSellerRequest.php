@@ -29,7 +29,7 @@ class BecomeSellerRequest extends FormRequest
             'otp' => 'bail|required',
             'business_entity' => 'bail|required',
             'company_role' => 'bail|required',
-            'business_documents[]' => 'nullable|mimes:jpg,png,jpeg|max:4096',
+            'business_documents[]' => 'nullable|mimes:jpg,png,jpeg|max:9086',
             'business_location' => 'bail|required',
             'business_description' => 'bail|nullable',
         ];
