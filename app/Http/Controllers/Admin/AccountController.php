@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\AccountService;
 use Illuminate\Http\Request;
 
-class AccountsController extends Controller
+class AccountController extends Controller
 {
     protected $accountService;
 

@@ -6,23 +6,56 @@ use App\Events\SendSellerOTP;
 use App\Models\Equipment;
 use App\Models\EquipmentCustomSpecification;
 use App\Models\EquipmentImage;
+use App\Models\Payment;
 use App\Models\Seller;
 use App\Models\SellerDocument;
 use App\Models\Service;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use App\Traits\SaveImage;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use PhpParser\Node\Expr\BinaryOp\Equal;
 
 class AccountService
 {
     use ApiResponse, SaveImage;
+
+    public function getDashboardData()
+    {
+        try {
+            $total_users = User::count();
+            $active_customers = User::where('last_login','<=',Carbon::now()->subDays(21))->count();
+            $total_equipments = Equipment::count();
+            $recent_transactions = Payment::orderBy('updated_at','desc')->get();
+            $total_services = Service::count();
+            $active_services = 0;
+            $clicked_services = 0;
+            $rented_equipments = Equipment::where('sale_type','rent')->count();
+            $sold_equipments = Equipment::where('sale_type','sale')->count();
+
+            return $this->success('success', 'Successful', [
+                'total_users' => $total_users,
+                'active_customers' => $active_customers,
+                'total_equipments' => $total_equipments,
+                'recent_transactions' => $recent_transactions->load('user'),
+                'total_services' => $total_services,
+                'active_services' => $active_services,
+                'clicked_services' => $clicked_services,
+                'total_products' => $total_equipments,
+                'rented_products' => $rented_equipments,
+                'sold_products' => $sold_equipments,
+            ], 200);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
     
     public function listUsers()
     {
         try {
             $userAccounts = User::all();
-            return $this->success('success', 'Accounts retrieved2 successfully', $userAccounts,200);
+            return $this->success('success', 'Accounts retrieved successfully', $userAccounts,200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }

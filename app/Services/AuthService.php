@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Events\ForgotPassword;
 use App\Models\User;
 use App\Traits\ApiResponse;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 
@@ -27,12 +28,14 @@ class AuthService
     {
         try {
             $user = User::where('email', $data['email'])->first();
-            // dd($user);
             if (!$user || !Hash::check($data['password'], $user->password)) {
                 return $this->error('error', 'Incorrect email/password', null, 400);
             }
 
             $token = $user->createToken($data['email'])->plainTextToken;
+            $user->last_login = Carbon::today()->toDateString();
+            $user->save();
+            
             return $this->success('success', 'Login successful', ['token' => $token, 'user' => $user], 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);

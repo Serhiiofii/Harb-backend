@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('services', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('seller_id')->index();
-            $table->string('name');
-            $table->string('category');
-            $table->string('description');
+        Schema::create('placed_orders', function (Blueprint $table) {
+            $table->uuid('id');
+            $table->uuid('user_id')->index();
+            $table->uuid('seller_id');
+            $table->string('details');
+            $table->decimal('amount',64,2);
+            $table->string('status');
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('placed_orders');
     }
 };

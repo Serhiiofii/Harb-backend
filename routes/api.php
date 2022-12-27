@@ -1,6 +1,9 @@
 <?php
 
-use App\Http\Controllers\Admin\AccountsController;
+use App\Http\Controllers\Admin\AccountController;
+use App\Http\Controllers\Admin\EquipmentController;
+use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\SellerController;
 use App\Http\Controllers\User\UserController;
@@ -39,11 +42,29 @@ Route::prefix('v1')->group(function(){
 
 
         Route::prefix('admin')->group(function () {
-            Route::controller(AccountsController::class)->group(function(){
-                Route::get('users', 'listUsers');
-                Route::post('users/search', 'searchUser');
-                Route::get('users/{id}', 'viewUser');
-                Route::delete('users/{id}', 'deleteUser');
+            Route::prefix('users')->controller(AccountController::class)->group(function(){
+                Route::get('/', 'listUsers');
+                Route::post('search', 'searchUser');
+                Route::get('/{id}', 'viewUser');
+                Route::delete('/{id}', 'deleteUser');
+            });
+            Route::prefix('payments')->controller(PaymentController::class)->group(function () {
+                Route::get('/', 'getPaymentsDashboard');
+            });
+            Route::prefix('equipments')->controller(EquipmentController::class)->group(function () {
+                Route::get('/', 'getAll');
+                Route::post('search', 'searchEquipment');
+                Route::delete('/{id}', 'deleteEquipment');
+            });
+            Route::prefix('services')->controller(ServiceController::class)->group(function () {
+                Route::get('/', 'getAll');
+                Route::post('search', 'search');
+                Route::delete('/{id}', 'delete');
+            });
+            Route::prefix('orders')->controller(ServiceController::class)->group(function () {
+                Route::get('/', 'getAll');
+                Route::post('search', 'search');
+                Route::delete('/{id}', 'delete');
             });
         });
         // middleware('isAdmin')->

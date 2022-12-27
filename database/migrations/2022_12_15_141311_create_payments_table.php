@@ -13,17 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('equipment', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create('payments', function (Blueprint $table) {
+            $table->uuid('id');
             $table->uuid('user_id')->index();
-            $table->uuid('seller_id')->index();
-            $table->string('name');
-            $table->string('category');
-            $table->string('manufacturer');
-            $table->string('equipment_specification');
-            $table->string('build_year');
             $table->string('sale_type');//'sale' or 'rent'
-            $table->string('description');
+            $table->string('category'); //'equipment', 'service'
+            $table->decimal('amount',64,2);
+            $table->string('status')->default('pending');//'received' or 'sent' or 'pending'
             $table->timestamps();
         });
     }
@@ -35,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('equipment');
+        Schema::dropIfExists('payments');
     }
 };
