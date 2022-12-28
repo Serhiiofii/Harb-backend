@@ -68,9 +68,21 @@ class AccountService
             if($user == null) {
                 return $this->error('error','Account not found',null,400);
             }
+
             $sellerEquipments = Equipment::where('seller_id',auth()->user()->id)->with('equipmentImages', 'customSpecifications')->get();
-            $services = Service::where('seller_id',auth()->user()->id)->orWhere('user_id',auth()->user()->id)->get();
-            return $this->success('success', 'Account retrieved successfully', ['user' => $user, 'equipments' => $sellerEquipments, 'services' => $services], 200);
+            $services = Service::where('seller_id',auth()->user()->id)->get();
+            $sold_transactions = Payment::where('sale_type','sale')->count();
+            $rented_transactions = Payment::where('sale_type','rent')->count();
+            $docs = SellerDocument::where('seller_id',$id)->get();
+
+            return $this->success('success', 'successful', [
+                'user' => $user,
+                'equipments' => $sellerEquipments,
+                'services' => $services,
+                'sold_transactions' => $sold_transactions,
+                'rented_transactions' => $rented_transactions,
+                'documents' => $docs
+            ], 200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }

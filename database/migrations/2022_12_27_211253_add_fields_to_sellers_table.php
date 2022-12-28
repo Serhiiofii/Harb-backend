@@ -13,18 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sellers', function (Blueprint $table) {
-            $table->uuid('id');
-            $table->uuid('user_id')->index();
-            $table->string('company_name');
-            $table->string('company_email');
-            $table->string('business_entity');
-            $table->string('company_role');
-            $table->string('business_location');
-            $table->string('business_description')->nullable();
+        Schema::table('sellers', function (Blueprint $table) {
             $table->boolean('verified')->default(false);
             $table->boolean('suspended')->default(false);
-            $table->timestamps();
         });
     }
 
@@ -35,6 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sellers');
+        Schema::table('sellers', function (Blueprint $table) {
+            //
+        });
     }
 };

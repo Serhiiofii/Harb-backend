@@ -35,7 +35,7 @@ class SellerService
                 'company_email' => $data['company_email']
             ];
 
-            event(new SendSellerOTP($userdata));
+            // event(new SendSellerOTP($userdata));
             return $this->success('success', 'An OTP has been sent to ' . $data['company_email'], $user, 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
@@ -46,7 +46,7 @@ class SellerService
     {
         try {
             $data = $request->validated();
-            if(auth()->user()->otp != $data['otp']) {
+            if (auth()->user()->otp != $data['otp']) {
                 return $this->error('error', 'Invalid OTP code', null, 400);
             }
 
@@ -75,8 +75,8 @@ class SellerService
     public function setupAccountDetails(array $data)
     {
         try {
-            $accountExists = SellerBusinessAccount::where('account_number',$data['account_number'])->first();
-            if($accountExists) {
+            $accountExists = SellerBusinessAccount::where('account_number', $data['account_number'])->first();
+            if ($accountExists) {
                 return $this->error('error', 'Account details already exists', null, 400);
             }
 
@@ -90,13 +90,71 @@ class SellerService
                 'account_officer' => $data['account_officer'],
                 'account_officer_phone' => $data['account_officer_phone'],
             ]);
-            
+
             return $this->success('success', 'Seller account details added successfully', $accountDetails, 201);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
     }
 
-    
+    public function getCompanies()
+    {
+        try {
+            $total_companies = Seller::count();
+            $companies = Seller::all();
+            $verified_companies = Seller::where('verified', true)->count();
+            $suspended_companies = Seller::where('suspended', true)->count();
 
+            return $this->success('success', 'Successful', [
+                'total_companies' => $total_companies,
+                'verified_companies' => $verified_companies,
+                'suspended_companies' => $suspended_companies,
+                'companies' => $companies->load('user', 'businessDocuments')
+            ], 200);
+        } catch (\Exception $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function search($data)
+    {
+        try {
+            $result = Seller::where('company_name', 'like', '%' . $data['search'] . '%')->get();
+            return $this->success('success', 'Search successful', $result, 200);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function toggleVerify($company)
+    {
+        try {
+            $company = Seller::where('id', $company)->first();
+            if (!$company) {
+                return $this->error('error', 'Company does not exist', null, 400);
+            }
+
+            $company->verified = $company->verified ? false : true;
+            $company->save();
+
+            $message = $company->verified ? 'Company marked as verified' : 'Company marked as unverified';
+            return $this->success('success', $message, $company, 200);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $company = Seller::where('id', $id)->first();
+            if(!$company) {
+                return $this->error('error', 'Company not found', null, 400);
+            }
+            $company->delete();
+            return $this->success('success', 'Company deleted successfully', null, 200);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
 }

@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\AccountController;
+use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EquipmentController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Auth\AuthController;
@@ -42,9 +45,12 @@ Route::prefix('v1')->group(function(){
 
 
         Route::prefix('admin')->group(function () {
+            Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
+                Route::get('/get-data', 'dashboardData');
+            });
             Route::prefix('users')->controller(AccountController::class)->group(function(){
                 Route::get('/', 'listUsers');
-                Route::post('search', 'searchUser');
+                Route::post('/search', 'searchUser');
                 Route::get('/{id}', 'viewUser');
                 Route::delete('/{id}', 'deleteUser');
             });
@@ -61,12 +67,20 @@ Route::prefix('v1')->group(function(){
                 Route::post('search', 'search');
                 Route::delete('/{id}', 'delete');
             });
-            Route::prefix('orders')->controller(ServiceController::class)->group(function () {
+            Route::prefix('orders')->controller(OrderController::class)->group(function () {
                 Route::get('/', 'getAll');
                 Route::post('search', 'search');
                 Route::delete('/{id}', 'delete');
             });
+            Route::prefix('companies')->controller(CompanyController::class)->group(function () {
+                Route::get('/', 'getAll');
+                Route::post('search', 'search');
+                Route::put('/{company}', 'toggleVerify');
+                Route::delete('/{id}', 'delete');
+            });
         });
+
+
         // middleware('isAdmin')->
     });
     

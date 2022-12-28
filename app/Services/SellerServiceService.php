@@ -30,12 +30,14 @@ class SellerServiceService
             $booked = BookedService::count();
             $unbooked = $total - $booked;
             $services = Service::all();
+
             return $this->success('success', 'Success', [
                 'total_services' => $total,
                 'booked_services' => $booked,
                 'unbooked_services' => $unbooked,
                 'services' => $services->load('seller')
             ], 200);
+            
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
