@@ -64,7 +64,17 @@ class UserController extends Controller
         return $this->userService->uploadPhoto($data);
     }
 
+    public function getNotifications()
+    {
+        return $this->userService->getNotifications();
+    }
 
+    public function getCartItems()
+    {
+        return $this->userService->getCartItems();
+    }
+
+    
 
     
 }

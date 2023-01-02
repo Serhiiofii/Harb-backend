@@ -2,10 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\ModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class UserNotification extends Model
 {
-    use HasFactory;
+    use HasFactory, ModelTrait;
+
+    protected $guarded = [];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
 }

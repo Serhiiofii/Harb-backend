@@ -41,6 +41,8 @@ Route::prefix('v1')->group(function(){
             Route::put('bio', 'updateBio');
             Route::put('location', 'updateLocation');
             Route::post('update-photo', 'updateProfilePhoto');
+            Route::get('notifications', 'getNotifications');
+            Route::get('cart-items', 'getCartItems');
         });
 
         Route::prefix('seller')->controller(SellerController::class)->group(function () {

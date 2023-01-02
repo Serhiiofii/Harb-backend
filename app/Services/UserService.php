@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\CartItem;
 use App\Models\User;
+use App\Models\UserNotification;
 use App\Traits\ApiResponse;
 use App\Traits\SaveImage;
 use Illuminate\Support\Facades\Hash;
@@ -134,8 +136,28 @@ class UserService
         }
     }
 
-    
+    public function getNotifications()
+    {
+        try {
+            $notifications = UserNotification::where('user_id',auth()->user()->id)->get();
+            return $this->success('success', 'Notifications retrieved successfully', $notifications->load('user'), 200);
+        } catch (\Exception $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
 
+    public function getCartItems()
+    {
+        try {
+            $cart_items = CartItem::where('user_id', auth()->user()->id)->get();
+            return $this->success('success', 'Cart items retrieved successfully', $cart_items->load('user'), 200);
+        } catch (\Exception $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+
+    
 
 
 
