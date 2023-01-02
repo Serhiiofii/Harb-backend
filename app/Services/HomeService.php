@@ -12,6 +12,7 @@ use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+// use App\Services\HomeService;
 
 class HomeService
 {
@@ -76,6 +77,13 @@ class HomeService
                 'equipment_id' => $productExist->id,
                 'amount' => $data['amount'],
                 'status' => 'pending'
+            ]);
+
+            $notification = new UserNotificationService();
+            $notified = $notification->notifyUser([
+                'user_id' => $productExist->seller_id,
+                'title' => "Bid for $result->equipment->name - $result->amount",
+                'description' => "Bid for $result->equipment->name - $result->amount has been placed by ".auth()->user()->first_name.' '.auth()->user()->last_name
             ]);
 
             return $this->success('success', 'Product bid sent successfully', $result->load('equipment','seller','user'), 201);

@@ -141,6 +141,13 @@ class SellerService
             $company->verified = $company->verified ? false : true;
             $company->save();
 
+            $notification = new UserNotificationService();
+            $notified = $notification->notifyUser([
+                'user_id' => $company->user_id,
+                'title' => "Seller account has been approved",
+                'description' => "Your seller account for $company->company_name has been approved."
+            ]);
+
             $message = $company->verified ? 'Company marked as verified' : 'Company marked as unverified';
             return $this->success('success', $message, $company, 200);
         } catch (\Throwable $e) {
