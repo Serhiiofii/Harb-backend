@@ -58,6 +58,14 @@ class SellerController extends Controller
     {
         return $this->serviceService->addService($request->validated());
     }
+
+    public function productBidOffer(Request $request, $product)
+    {
+        $data = $request->validate([
+            'offer' => 'bail|required'
+        ]);
+        return $this->sellerService->productBidOffer($data, $product);
+    }
     
 
 

@@ -3,17 +3,21 @@
 namespace App\Services;
 
 use App\Events\SendSellerOTP;
+use App\Http\Controllers\CartController;
+use App\Models\Equipment;
+use App\Models\ProductBid;
 use App\Models\Seller;
 use App\Models\SellerBusinessAccount;
 use App\Models\SellerDocument;
 use App\Models\User;
 use App\Traits\ApiResponse;
+use App\Traits\GenerateRandomString;
 use App\Traits\SaveImage;
 use Illuminate\Support\Facades\Http;
 
 class SellerService
 {
-    use ApiResponse, SaveImage;
+    use ApiResponse, SaveImage, GenerateRandomString;
 
     private $sellerDocumentService;
 
@@ -148,11 +152,51 @@ class SellerService
     {
         try {
             $company = Seller::where('id', $id)->first();
-            if(!$company) {
+            if (!$company) {
                 return $this->error('error', 'Company not found', null, 400);
             }
             $company->delete();
             return $this->success('success', 'Company deleted successfully', null, 200);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function productBidOffer(array $data, $product)
+    {
+        try {
+            $productExist = Equipment::where('id', $product)->first();
+            if ($productExist == null) {
+                return $this->error('error', 'Product not found', null, 404);
+            }
+
+            $bid = ProductBid::where('equipment_id', $product)->orWhere('seller_id', auth()->user()->id)->first();
+            if ($bid == null) {
+                return $this->error('error', 'Unauthorized bid', null, 400);
+            }
+
+            $bid->status = $data['offer'] == 'approve' ? 'approved' : 'declined';
+            $bid->save();
+
+            if ($bid->status == 'approved') {
+                $cartService = new CartService();
+                $cartService->addToCart([
+                    'user_id' => $bid->user_id,
+                    'equipment_id' => $bid->equipment_id,
+                    'bid_amount' => $bid->amount,
+                    'reference_id' => $this->generateRandomString()
+                ]);
+            }
+
+            $notification = new UserNotificationService();
+            $notification->notifyUser([
+                'user_id' => $bid->user_id,
+                'title' => 'Bid for ' . $bid->equipment->name . ' ' . $bid->status,
+                'description' => "$bid->seller->first_name $bid->status your bid for $bid->equipment->name"
+            ]);
+
+            $message = $data['offer'] == 'approve' ? 'Bid approved' : 'Bid declined';
+            return $this->success('success', $message, $bid->load('equipment', 'seller', 'user'), 200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }

@@ -16,7 +16,6 @@ class AuthService
     public function createAccount(array $data)
     {
         try {
-            
             $user = User::create($data);
             return $this->success('success', 'Account created successfully', $user, 201);
         } catch (\Exception $e) {
@@ -35,7 +34,7 @@ class AuthService
             $token = $user->createToken($data['email'])->plainTextToken;
             $user->last_login = Carbon::today()->toDateString();
             $user->save();
-            
+
             return $this->success('success', 'Login successful', ['token' => $token, 'user' => $user], 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
@@ -79,7 +78,5 @@ class AuthService
             return $this->error('error', $e->getMessage(), null, 500);
         }
     }
-
-
     
 }

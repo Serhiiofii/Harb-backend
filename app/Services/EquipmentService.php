@@ -97,7 +97,7 @@ class EquipmentService
             $img = $this->saveFile($loadImage);
             $tempArr = [];
             $tempArr['equipment_id'] = $id;
-            $tempArr['user_id'] = auth()->user()->id;
+            // $tempArr['user_id'] = auth()->user()->id;
             $tempArr['image'] = $img;
             $imageArray[] = $tempArr;
         }

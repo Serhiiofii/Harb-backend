@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AccountController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EquipmentController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\SellerController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
@@ -24,6 +26,13 @@ Route::prefix('v1')->group(function(){
     });
 
     Route::middleware('auth:sanctum')->group(function () {
+        Route::controller(HomeController::class)->group(function () {
+            Route::get('products/get-products', 'getDashboardData');
+            Route::get('bid-notifications', 'getBids');
+            Route::get('products/{product}', 'viewProduct');
+            Route::post('products/{product}/bid', 'placeProductBid');
+        });
+
         Route::prefix('account')->controller(UserController::class)->group(function () {
             Route::get('profile', 'userProfile');
             Route::put('password', 'updatePassword');
@@ -41,12 +50,16 @@ Route::prefix('v1')->group(function(){
             Route::post('equipments/add', 'addEquipment');
             Route::post('services/add', 'addService');
             Route::post('equipments/custom-specification', 'addCustomSpecification');
+            Route::put('products/{product}/bid-offer', 'productBidOffer');
         });
-
 
         Route::prefix('admin')->group(function () {
             Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
                 Route::get('/get-data', 'dashboardData');
+            });
+            Route::controller(AdminController::class)->group(function () {
+                Route::get('/get-admins', 'getAdmins');
+                Route::post('/create-admin', 'createAccount');
             });
             Route::prefix('users')->controller(AccountController::class)->group(function(){
                 Route::get('/', 'listUsers');

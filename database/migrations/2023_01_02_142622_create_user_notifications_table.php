@@ -13,16 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('user_notifications', function (Blueprint $table) {
             $table->uuid('id');
             $table->uuid('user_id')->index();
-            $table->uuid('equipment_id')->index()->nullable();
-            $table->string('sale_type');//'sale' or 'rent'
-            $table->string('category'); //'equipment', 'service'
-            $table->decimal('amount',64,2);
-            $table->string('checkout_id');
-            // $table->string('checkout_id');
-            $table->string('status')->default('pending');//'received' or 'sent' or 'pending'
+            $table->string('title');
+            $table->string('description');
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }
@@ -34,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('user_notifications');
     }
 };

@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('build_year');
             $table->string('sale_type');//'sale' or 'rent'
             $table->string('description');
+            $table->unsignedBigInteger('view_count')->default(0)->nullable();
+            // $table->unsignedBigInteger('sale_count')->default(0)->nullable();
             $table->timestamps();
         });
     }

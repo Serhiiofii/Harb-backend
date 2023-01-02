@@ -16,4 +16,9 @@ class PlacedOrder extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+
+    public function equipment()
+    {
+        return $this->belongsTo(Equipment::class, 'equipment_id');
+    }
 }

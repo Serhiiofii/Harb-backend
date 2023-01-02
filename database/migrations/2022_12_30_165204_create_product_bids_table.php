@@ -13,17 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('placed_orders', function (Blueprint $table) {
+        Schema::create('product_bids', function (Blueprint $table) {
             $table->uuid('id');
             $table->uuid('user_id')->index();
+            $table->uuid('seller_id')->index();
             $table->uuid('equipment_id')->index()->nullable();
-            $table->uuid('seller_id');
-            $table->string('details')->nullable();
+            // $table->uuid('service_id')->index()->nullable();
             $table->decimal('amount',64,2);
-            $table->string('status');
-            $table->string('category'); //'equipment', 'service'
-            $table->string('checkout_reference');
-            $table->uuid('sale_type')->nullable();//sale or rent
+            // $table->unsignedInteger('quantity')->default(1);
+            $table->string('status')->nullable();//'accepted','declined','pending'
             $table->timestamps();
         });
     }
@@ -35,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('placed_orders');
+        Schema::dropIfExists('product_bids');
     }
 };

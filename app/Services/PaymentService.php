@@ -12,12 +12,13 @@ use App\Models\SellerDocument;
 use App\Models\Service;
 use App\Models\User;
 use App\Traits\ApiResponse;
+use App\Traits\GenerateRandomString;
 use App\Traits\SaveImage;
 use Illuminate\Support\Facades\Http;
 
 class PaymentService
 {
-    use ApiResponse, SaveImage;
+    use ApiResponse, SaveImage, GenerateRandomString;
 
     public function getPaymentsDashboard()
     {
