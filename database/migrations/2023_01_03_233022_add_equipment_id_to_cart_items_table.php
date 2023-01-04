@@ -13,12 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('seller_documents', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('user_id')->index();
-            $table->uuid('seller_id')->index();
-            $table->string('document');
-            $table->timestamps();
+        Schema::table('cart_items', function (Blueprint $table) {
+            $table->decimal('bidded_amount', 64, 2)->nullable()->change();
         });
     }
 
@@ -29,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('seller_documents');
+        Schema::table('cart_items', function (Blueprint $table) {
+            //
+        });
     }
 };

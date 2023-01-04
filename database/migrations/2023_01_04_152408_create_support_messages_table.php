@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('seller_documents', function (Blueprint $table) {
+        Schema::create('support_messages', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id')->index();
-            $table->uuid('seller_id')->index();
-            $table->string('document');
+            $table->uuid('sender')->index();
+            $table->uuid('sent_to')->index();
+            $table->string('content');
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('seller_documents');
+        Schema::dropIfExists('support_messages');
     }
 };

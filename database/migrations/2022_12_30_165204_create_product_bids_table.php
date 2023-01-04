@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('product_bids', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
             $table->uuid('seller_id')->index();
             $table->uuid('equipment_id')->index()->nullable();

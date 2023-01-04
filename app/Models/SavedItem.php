@@ -6,7 +6,7 @@ use App\Traits\ModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CartItem extends Model
+class SavedItem extends Model
 {
     use HasFactory, ModelTrait;
 
@@ -19,6 +19,11 @@ class CartItem extends Model
 
     public function equipment()
     {
-        return $this->belongsTo(Equipment::class);
+        return $this->belongsTo(Equipment::class, 'equipment_id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
     }
 }

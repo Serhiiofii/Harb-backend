@@ -3,6 +3,10 @@
 namespace App\Services;
 
 use App\Models\CartItem;
+use App\Models\Equipment;
+use App\Models\SavedItem;
+use App\Models\Seller;
+use App\Models\Service;
 use App\Models\User;
 use App\Models\UserNotification;
 use App\Traits\ApiResponse;
@@ -31,8 +35,8 @@ class UserService
     public function updatePassword(array $data)
     {
         try {
-            $user = User::where('id',auth()->user()->id)->first();
-            if($user == null) {
+            $user = User::where('id', auth()->user()->id)->first();
+            if ($user == null) {
                 return $this->error('error', 'Account not found', null, 404);
             }
             if (!Hash::check($data['password'], $user->password)) {
@@ -55,7 +59,7 @@ class UserService
             if ($user == null) {
                 return $this->error('error', 'Account not found', null, 404);
             }
-            
+
             $user->first_name = $data['first_name'];
             $user->last_name = $data['last_name'];
             $user->email = $data['email'];
@@ -139,8 +143,20 @@ class UserService
     public function getNotifications()
     {
         try {
-            $notifications = UserNotification::where('user_id',auth()->user()->id)->get();
+            $notifications = UserNotification::where('user_id', auth()->user()->id)->get();
             return $this->success('success', 'Notifications retrieved successfully', $notifications->load('user'), 200);
+        } catch (\Exception $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function getNotification($id)
+    {
+        try {
+            $notification = UserNotification::where('user_id', auth()->user()->id)->where('id', $id)->first();
+            $notification->is_read = true;
+            $notification->save();
+            return $this->success('success', 'Notification retrieved successfully', $notification->load('user'), 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
@@ -150,7 +166,70 @@ class UserService
     {
         try {
             $cart_items = CartItem::where('user_id', auth()->user()->id)->get();
-            return $this->success('success', 'Cart items retrieved successfully', $cart_items->load('user'), 200);
+            $similar_products = Equipment::inRandomOrder()->limit(3)->get();
+            $similar_services = Service::inRandomOrder()->limit(3)->get();
+            return $this->success('success', 'Cart items retrieved successfully', [
+                'cart_items' => $cart_items->load('equipment', 'equipment.user.seller'),
+                'similar_products' => $similar_products,
+                'similar_services' => $similar_services->load('seller', 'seller.user')
+            ], 200);
+        } catch (\Exception $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function saveItem($id)
+    {
+        try {
+            $is_equipment = Equipment::where('id', $id)->first();
+            $is_service = null;
+            if (!$is_equipment) {
+                $is_service = Service::where('id', $id)->first();
+            }
+
+            $savedItem = SavedItem::create([
+                'user_id' => auth()->user()->id,
+                'equipment_id' => $is_equipment == null ? null : $is_equipment->id,
+                'service_id' => $is_service == null ? null : $is_service->id,
+            ]);
+
+            return $this->success('success', 'Item saved successfully', $savedItem->load('equipment', 'service'), 201);
+        } catch (\Exception $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function getSavedItems()
+    {
+        try {
+            $saved_items = SavedItem::all();
+            return $this->success('success', 'Items retrieved successfully', $saved_items->load('equipment', 'service'), 200);
+        } catch (\Exception $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function getService($id)
+    {
+        try {
+            $service_data = Service::where('id', $id)->first();
+            return $this->success('success', 'Service details retrieved successfully', $service_data->load('seller', 'seller.user'), 200);
+        } catch (\Exception $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function getSeller($id)
+    {
+        try {
+            $seller = Seller::where('id', $id)->first();
+            $equipments = Equipment::where('seller_id',$id)->limit(9)->get();
+            $services = Service::where('seller_id',$id)->limit(3)->get();
+            return $this->success('success', 'Service details retrieved successfully', [
+                'seller' => $seller->load('user'),
+                'equipments' => $equipments,
+                'services' => $services
+            ], 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
@@ -158,9 +237,4 @@ class UserService
 
 
     
-
-
-
-    
-
 }

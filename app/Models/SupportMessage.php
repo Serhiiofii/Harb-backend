@@ -6,19 +6,16 @@ use App\Traits\ModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CartItem extends Model
+class SupportMessage extends Model
 {
     use HasFactory, ModelTrait;
 
     protected $guarded = [];
 
-    public function user()
+    public function sender()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'sender');
     }
 
-    public function equipment()
-    {
-        return $this->belongsTo(Equipment::class);
-    }
+    
 }

@@ -17,9 +17,13 @@ class CartService
             if ($cartItem) {
                 $reference_id = $cartItem->reference;
             }
+            // dd($data['equipment_id']);
+            // dd(array_key_exists('equipment_id', $data));
             $cart = CartItem::create([
                 'user_id' => $data['user_id'],
-                'item_id' => $data['item_id'],
+                'bid_amount' => $data['bid_amount'],
+                'equipment_id' => array_key_exists('equipment_id', $data) ? $data['equipment_id'] : null,
+                // 'service_id' => in_array('service_id', $data) ? $data['service_id'] : null,
                 'reference' => $cartItem != null ? $reference_id : $data['reference_id']
             ]);
             return true;

@@ -12,6 +12,7 @@ use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use App\Services\UserNotificationService;
 // use App\Services\HomeService;
 
 class HomeService
@@ -64,10 +65,19 @@ class HomeService
                 return $this->error('error', 'Product not found', null, 400);
             }
 
+            $notification = new UserNotificationService();
             $bidded = ProductBid::where('equipment_id',$product)->first();
             if($bidded != null) {
+                // dd('ss1');
                 $bidded->amount = $data['amount'];
                 $bidded->save();
+                // dd('reach');
+                $notified = $notification->notifyUser([
+                    'user_id' => $productExist->seller_id,
+                    'title' => 'New Bid for '.$bidded->equipment->name .'-'. $bidded->amount,
+                    'description' => 'New Bid for '.$bidded->equipment->name.' - '.$bidded->amount.' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name
+                ]);
+                // dd($notified);
                 return $this->success('success', 'New Product bid sent successfully', $bidded->load('equipment', 'seller', 'user'), 200);
             }
 
@@ -82,8 +92,8 @@ class HomeService
             $notification = new UserNotificationService();
             $notified = $notification->notifyUser([
                 'user_id' => $productExist->seller_id,
-                'title' => "Bid for $result->equipment->name - $result->amount",
-                'description' => "Bid for $result->equipment->name - $result->amount has been placed by ".auth()->user()->first_name.' '.auth()->user()->last_name
+                'title' => 'Bid for ' . $bidded->equipment->name . '-' . $bidded->amount,
+                'description' => 'Bid for ' . $bidded->equipment->name . ' - ' . $bidded->amount . ' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name
             ]);
 
             return $this->success('success', 'Product bid sent successfully', $result->load('equipment','seller','user'), 201);

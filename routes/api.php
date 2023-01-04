@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MessagingController;
 use App\Http\Controllers\User\SellerController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
@@ -41,8 +42,17 @@ Route::prefix('v1')->group(function(){
             Route::put('bio', 'updateBio');
             Route::put('location', 'updateLocation');
             Route::post('update-photo', 'updateProfilePhoto');
-            Route::get('notifications', 'getNotifications');
             Route::get('cart-items', 'getCartItems');
+            Route::get('saved-items', 'getSavedItems');
+            Route::get('notifications', 'getNotifications');
+            Route::get('notifications/{id}', 'getNotification');
+            Route::post('saved-items/{id}', 'saveItem');
+            Route::get('services/{id}', 'getService');
+            Route::get('sellers/{id}', 'getSeller');
+        });
+
+        Route::prefix('messaging')->controller(MessagingController::class)->group(function() {
+            Route::post('send-message', 'sendMessage');
         });
 
         Route::prefix('seller')->controller(SellerController::class)->group(function () {

@@ -27,4 +27,8 @@ class Seller extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function equipments()
+    {
+        return $this->hasMany(Equipment::class, 'seller_id');
+    }
 }

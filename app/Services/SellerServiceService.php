@@ -15,9 +15,11 @@ class SellerServiceService
     public function addService(array $data)
     {
         try {
-            $data['seller_id'] = auth()->user()->id;
+            // Service::truncate();
+            // dd('d');
+            $data['seller_id'] = auth()->user()->seller->id;
             $userService = Service::create($data);
-            return $this->success('success', 'Service added successfully', $userService->load('user'), 201);
+            return $this->success('success', 'Service added successfully', $userService->load('seller','seller.user'), 201);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }

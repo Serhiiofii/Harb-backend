@@ -43,7 +43,7 @@ class EquipmentService
             $files = EquipmentImage::where('equipment_id',$id)->get();
             $customSpecs = EquipmentCustomSpecification::where('equipment_id', $id)->get();
             if(count($customSpecs) > 0) {
-                $ids = $customSpecs->pluck('id');
+                $ids = $customSpecs->pluck('id')->primary();
                 EquipmentCustomSpecification::destroy($ids);
             }
 
@@ -67,7 +67,7 @@ class EquipmentService
     {
         try {
             $data['user_id'] = auth()->user()->id;
-            $data['seller_id'] = auth()->user()->id;
+            $data['seller_id'] = auth()->user()->seller->id;
             $equipment = Equipment::create($data);
             if ($request->hasFile('images')) {
                 $imagedata = $this->saveImages($request->file()['images'], $equipment->id);

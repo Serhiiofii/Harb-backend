@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\SendSellerOTP;
 use App\Http\Controllers\CartController;
+use App\Models\CartItem;
 use App\Models\Equipment;
 use App\Models\ProductBid;
 use App\Models\Seller;
@@ -186,20 +187,26 @@ class SellerService
             $bid->save();
 
             if ($bid->status == 'approved') {
+                // dd('ds');
+                // dd($bid->equipment_id);
+                // dd(auth()->user()->seller->id);
                 $cartService = new CartService();
-                $cartService->addToCart([
+                $res = $cartService->addToCart([
                     'user_id' => $bid->user_id,
                     'equipment_id' => $bid->equipment_id,
                     'bid_amount' => $bid->amount,
                     'reference_id' => $this->generateRandomString()
                 ]);
+                // CartItem::truncate();
+                // dd('dd');
+                // dd($res);
             }
 
             $notification = new UserNotificationService();
             $notification->notifyUser([
                 'user_id' => $bid->user_id,
                 'title' => 'Bid for ' . $bid->equipment->name . ' ' . $bid->status,
-                'description' => "$bid->seller->first_name $bid->status your bid for $bid->equipment->name"
+                'description' => $bid->seller->first_name.' '.$bid->status.' your bid for '.$bid->equipment->name
             ]);
 
             $message = $data['offer'] == 'approve' ? 'Bid approved' : 'Bid declined';

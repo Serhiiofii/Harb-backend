@@ -14,9 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('cart_items', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
-            $table->uuid('item_id');
+            // $table->uuid('item_id');
+            $table->uuid('equipment_id')->nullable();
             $table->string('reference')->nullable();
             $table->decimal('bid_amount', 64, 2);
             $table->timestamps();

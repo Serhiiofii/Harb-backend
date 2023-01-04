@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('booked_services', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
             $table->uuid('service_id');
             $table->decimal('amount', 64, 2);

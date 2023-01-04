@@ -21,5 +21,10 @@ class Equipment extends Model
         return $this->hasMany(EquipmentCustomSpecification::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 
 }

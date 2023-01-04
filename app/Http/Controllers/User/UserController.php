@@ -69,11 +69,38 @@ class UserController extends Controller
         return $this->userService->getNotifications();
     }
 
+    public function getNotification($id)
+    {
+        return $this->userService->getNotification($id);
+    }
+
     public function getCartItems()
     {
         return $this->userService->getCartItems();
     }
 
+    public function saveItem($id)
+    {
+        return $this->userService->saveItem($id);
+    }
+
+    public function getSavedItems()
+    {
+        return $this->userService->getSavedItems();
+    }
+
+    public function getService($id)
+    {
+        return $this->userService->getService($id);
+    }
+
+    public function getSeller($id)
+    {
+        return $this->userService->getSeller($id);
+    }
+
+
+    
     
 
     
