@@ -13,14 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('support_messages', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('sender')->index();
-            $table->uuid('sent_to')->index();
+        Schema::table('support_messages', function (Blueprint $table) {
             $table->string('messaging_id');
-            $table->string('content');
-            $table->boolean('is_read')->default(false);
-            $table->timestamps();
         });
     }
 
@@ -31,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('support_messages');
+        Schema::table('support_messages', function (Blueprint $table) {
+            //
+        });
     }
 };

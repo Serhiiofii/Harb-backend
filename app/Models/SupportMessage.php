@@ -17,5 +17,16 @@ class SupportMessage extends Model
         return $this->belongsTo(User::class, 'sender');
     }
 
+    public function sentTo()
+    {
+        return $this->belongsTo(User::class, 'sent_to');
+    }
+
+    public function supportImages()
+    {
+        return $this->hasMany(SupportMessageImage::class,'support_message_id');
+    }
     
+
+
 }
