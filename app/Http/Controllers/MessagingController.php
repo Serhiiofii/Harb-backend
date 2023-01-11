@@ -20,18 +20,26 @@ class MessagingController extends Controller
         return $this->messagingService->sendMessage($request->validated(), $request);
     }
 
-    public function chatMessagesList()
-    {
-        return $this->messagingService->chatMessagesList();
-    }
-
-    public function getChats(Request $request)
+    public function userChat(Request $request)
     {
         $data = $request->validate([
-            'message_id' => 'bail|required',
-            'sent_to' => 'bail|required',
-            'sender' => 'bail|required',
+            'messaging_id' => 'bail|required|string'
         ]);
-        return $this->messagingService->getChats($data);
+        return $this->messagingService->userChat($data['messaging_id']);
     }
+
+    public function chatListUsers()
+    {
+        return $this->messagingService->chatListUsers();
+    }
+
+    // public function getChats(Request $request)
+    // {
+    //     $data = $request->validate([
+    //         'message_id' => 'bail|required',
+    //         'sent_to' => 'bail|required',
+    //         'sender' => 'bail|required',
+    //     ]);
+    //     return $this->messagingService->getChats($data);
+    // }
 }

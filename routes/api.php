@@ -53,8 +53,9 @@ Route::prefix('v1')->group(function(){
 
         Route::prefix('messaging')->controller(MessagingController::class)->group(function() {
             Route::post('send-message', 'sendMessage');
-            Route::get('chat-messages', 'chatMessagesList');
-            Route::get('chat-messages/{userId}', 'getChats');
+            Route::post('chat-messages', 'userChat');
+            Route::get('chat-list', 'chatListUsers');
+            // Route::get('chat-messages/{userId}', 'getChats');
         });
 
         Route::prefix('seller')->controller(SellerController::class)->group(function () {

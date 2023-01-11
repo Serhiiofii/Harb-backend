@@ -26,6 +26,7 @@ class MessageRequest extends FormRequest
         return [
             'content' => 'bail|required|string|max:255',
             'sent_to' => 'bail|required',
+            'messaging_id' => 'nullable|string',
             'images[]' => 'nullable|mimes:jpeg,jpg,png',
         ];
     }

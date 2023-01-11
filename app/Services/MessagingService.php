@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Requests\CartRequest;
 use App\Models\CartItem;
 use App\Models\SupportMessage;
+use App\Models\SupportMessageImage;
 use App\Traits\ApiResponse;
 use App\Traits\GenerateRandomString;
 use App\Traits\SaveImage;
@@ -20,11 +21,15 @@ class MessagingService
             // dd($data);
             // SupportMessage::truncate();
             // dd('ff');
-            $prevMessage = SupportMessage::where('messaging_id',$data['messaging_id'])->first();
+
+            $prevMessage = SupportMessage::where('sender',$data['sent_to'])->orWhere('sent_to',$data['sent_to'])->first();
+           
             if($prevMessage) {
                 $data['messaging_id'] = $prevMessage->messaging_id;
+            } else {
+                $data['messaging_id'] = $this->generateRandomString();
             }
-            $data['messaging_id'] = $this->generateRandomString();
+            
             $supportMessage = SupportMessage::create($data);
             if ($request->hasFile('images')) {
                 $imagedata = $this->saveImages($request->file()['images'], $supportMessage->id);
@@ -36,12 +41,12 @@ class MessagingService
         }
     }
 
-    private function saveImages(array $data, string $id)
+    protected function saveImages(array $data, string $id)
     {
         $imageArray = [];
         foreach ($data as $loadImage) {
-            $img = $this->saveFile($loadImage);
             $tempArr = [];
+            $img = $this->saveFile($loadImage);
             $tempArr['support_message_id'] = $id;
             $tempArr['image'] = $img;
             $imageArray[] = $tempArr;
@@ -49,22 +54,21 @@ class MessagingService
         return $imageArray;
     }
 
-    public function chatMessagesList()
+    public function userChat(string $messaging_id)
     {
         try {
-            $messages = SupportMessage::where('sender',auth()->user()->id)-> orWhere('sent_to', auth()->user()->id)->get();
-            return $this->success('success', 'Messages retrieved successfully', $messages->load('sentTo'), 200);
+            $chats = SupportMessage::where('messaging_id',$messaging_id)->get();
+            // $messages = SupportMessage::where('sender',auth()->user()->id)-> orWhere('sent_to', auth()->user()->id)->get();
+            return $this->success('success', 'Messages retrieved successfully', $chats->load('supportImages'), 200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
     }
 
-    public function getChats(array $data)
+    public function chatListUsers()
     {
         try {
-            $list = SupportMessage::where('id', $data['message_id'])->where(function($query) use ($data) {
-                $query->where('sent_to',$data['sent_to'])->orWhere('sender',$data['sender']);
-            })->get();
+            $list = SupportMessage::where('sent_to',auth()->user()->id)->orWhere('sender',auth()->user()->id)->get();
             return $this->success('success', 'Chat list retrieved successfully', $list->load('supportImages', 'sender', 'sentTo'), 200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
