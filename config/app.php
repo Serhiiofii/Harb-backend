@@ -30,6 +30,10 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
+    'paystack' => [
+        'secret_key' => env('PAYSTACK_SECRET_KEY')
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode

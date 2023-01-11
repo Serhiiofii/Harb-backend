@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('category'); //'equipment', 'service'
             $table->decimal('amount',64,2);
             $table->string('checkout_id');
+            $table->string('reference');
             // $table->string('checkout_id');
             $table->string('status')->default('pending');//'received' or 'sent' or 'pending'
             $table->timestamps();

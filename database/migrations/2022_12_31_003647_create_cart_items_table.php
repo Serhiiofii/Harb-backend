@@ -18,7 +18,8 @@ return new class extends Migration
             $table->uuid('user_id')->index();
             // $table->uuid('item_id');
             $table->uuid('equipment_id')->nullable();
-            $table->string('reference')->nullable();
+            $table->string('checkout_id');
+            // $table->string('reference')->nullable();
             $table->decimal('bid_amount', 64, 2);
             $table->timestamps();
         });

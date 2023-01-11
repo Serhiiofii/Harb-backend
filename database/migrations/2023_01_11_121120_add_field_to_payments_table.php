@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('support_messages', function (Blueprint $table) {
-            $table->string('messaging_id');
+        Schema::table('payments', function (Blueprint $table) {
+            $table->string('reference');
         });
     }
 
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('support_messages', function (Blueprint $table) {
+        Schema::table('payments', function (Blueprint $table) {
             //
         });
     }

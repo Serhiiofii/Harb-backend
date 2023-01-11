@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Services\PaymentService;
@@ -23,5 +23,15 @@ class PaymentController extends Controller
     public function getPayment($id)
     {
         return $this->paymentService->viewPayment($id);
+    }
+
+    public function verifyTransaction(Request $request)
+    {
+        $data = $request->validate([
+            'paystack_reference_id' => 'bail|required',
+            'cart_reference_id' => 'bail|required',
+        ]);
+
+        return $this->paymentService->verifyTransaction($data);
     }
 }

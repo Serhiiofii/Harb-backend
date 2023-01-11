@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EquipmentController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HomeController;
@@ -55,7 +55,10 @@ Route::prefix('v1')->group(function(){
             Route::post('send-message', 'sendMessage');
             Route::post('chat-messages', 'userChat');
             Route::get('chat-list', 'chatListUsers');
-            // Route::get('chat-messages/{userId}', 'getChats');
+        });
+
+        Route::prefix('transactions')->controller(PaymentController::class)->group(function () {
+            Route::post('verify', 'verifyTransaction');
         });
 
         Route::prefix('seller')->controller(SellerController::class)->group(function () {

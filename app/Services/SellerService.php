@@ -183,6 +183,7 @@ class SellerService
                 return $this->error('error', 'Unauthorized bid', null, 400);
             }
 
+            // dd($bid->equipment->sale_type);
             $bid->status = $data['offer'] == 'approve' ? 'approved' : 'declined';
             $bid->save();
 
@@ -195,7 +196,7 @@ class SellerService
                     'user_id' => $bid->user_id,
                     'equipment_id' => $bid->equipment_id,
                     'bid_amount' => $bid->amount,
-                    'reference_id' => $this->generateRandomString()
+                    'checkout_id' => $this->generateRandomString()
                 ]);
                 // CartItem::truncate();
                 // dd('dd');
