@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('checkout_id');
             // $table->string('reference')->nullable();
             $table->decimal('bid_amount', 64, 2);
+            $table->decimal('bidded_amount', 64, 2)->nullable()->change();
             $table->timestamps();
         });
     }
