@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminRoleRequest;
 use App\Http\Requests\CreateAdminRequest;
+use App\Models\User;
 use App\Services\AdminService;
 use Illuminate\Http\Request;
 
@@ -24,5 +26,10 @@ class AdminController extends Controller
     public function getAdmins()
     {
         return $this->adminService->getAdmins();
+    }
+
+    public function changeAdminPermission(AdminRoleRequest $request, User $user)
+    {
+        return $this->adminService->changeAdminPermission($request->validated(), $user);
     }
 }

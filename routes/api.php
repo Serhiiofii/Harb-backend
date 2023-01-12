@@ -78,6 +78,7 @@ Route::prefix('v1')->group(function(){
             Route::controller(AdminController::class)->group(function () {
                 Route::get('/get-admins', 'getAdmins');
                 Route::post('/create-admin', 'createAccount');
+                Route::put('/{user}/roles', 'changeAdminPermission');
             });
             Route::prefix('users')->controller(AccountController::class)->group(function(){
                 Route::get('/', 'listUsers');

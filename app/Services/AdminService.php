@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\SendSellerOTP;
+use App\Models\AdminRole;
 use App\Models\Equipment;
 use App\Models\EquipmentCustomSpecification;
 use App\Models\EquipmentImage;
@@ -35,12 +36,14 @@ class AdminService
                 'user_role' => 'admin'
             ]);
 
+            $admin->adminRoles()->create();
+
             Mail::send('emails.new-admin-account', ['user' => $data], function ($message) use ($data) {
                 $message->from(config('mail.from.address'));
                 $message->subject('Administrator Account Created Successfully');
                 $message->to($data['email']);
             });
-            return $this->success('success', 'Admin created successfully', $admin, 201);
+            return $this->success('success', 'Admin created successfully', $admin->load('adminRoles'), 201);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
@@ -49,8 +52,18 @@ class AdminService
     public function getAdmins()
     {
         try {
-            $adminAccounts = User::where('user_role','admin')->get();
+            $adminAccounts = User::where('user_role','admin')->with('adminRoles')->get();
             return $this->success('success', 'Admin accounts retrieved successfully', $adminAccounts, 200);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function changeAdminPermission(array $data, User $user)
+    {
+        try {
+            $user->adminRoles()->update($data);
+            return $this->success('success', 'Role updated successfully', $user->load('adminRoles'), 200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }

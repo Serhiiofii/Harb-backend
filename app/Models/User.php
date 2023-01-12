@@ -72,6 +72,11 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class);
     }
 
+    public function adminRoles()
+    {
+        return $this->hasMany(AdminRole::class,'user_id');
+    }
+
 
 
     // public function tokens()
