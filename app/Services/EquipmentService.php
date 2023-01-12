@@ -69,11 +69,12 @@ class EquipmentService
             $data['user_id'] = auth()->user()->id;
             $data['seller_id'] = auth()->user()->seller->id;
             $equipment = Equipment::create($data);
+            $loadedImages = null;
             if ($request->hasFile('images')) {
                 $imagedata = $this->saveImages($request->file()['images'], $equipment->id);
                 $loadedImages = $equipment->equipmentImages()->createMany($imagedata);
             }
-            return $this->success('success', 'Equipment added successfully', ['equipment' => $equipment, 'equipment_images' => $loadedImages->load('equipment')], 201);
+            return $this->success('success', 'Equipment added successfully', ['equipment' => $equipment, 'equipment_images' => $loadedImages == null ? null:$loadedImages->load('equipment')], 201);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
