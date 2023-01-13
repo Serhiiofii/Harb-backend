@@ -29,8 +29,9 @@ class SellerController extends Controller
     public function getRegistrationCode(Request $request)
     {
         $data = $request->validate([
-            'company_email' => 'bail|required|email|unique:sellers'
+            'company_email' => 'bail|required'
         ]);
+        
         return $this->sellerService->requestRegistrationOTP($data);
     }
 

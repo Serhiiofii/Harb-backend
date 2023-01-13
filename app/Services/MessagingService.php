@@ -31,6 +31,7 @@ class MessagingService
             }
             
             $supportMessage = SupportMessage::create($data);
+            $loadedImages = null;
             if ($request->hasFile('images')) {
                 $imagedata = $this->saveImages($request->file()['images'], $supportMessage->id);
                 $loadedImages = $supportMessage->supportImages()->createMany($imagedata);

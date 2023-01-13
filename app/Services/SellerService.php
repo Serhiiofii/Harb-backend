@@ -40,7 +40,7 @@ class SellerService
                 'company_email' => $data['company_email']
             ];
 
-            // event(new SendSellerOTP($userdata));
+            event(new SendSellerOTP($userdata));
             return $this->success('success', 'An OTP has been sent to ' . $data['company_email'], $user, 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
@@ -65,6 +65,7 @@ class SellerService
                 'business_description' => $data['business_description'],
             ]);
 
+            $loadedImages = null;
             if ($request->hasFile('business_documents')) {
                 $imagedata = $this->sellerDocumentService->saveImages($request->file()['business_documents'], $seller->id, auth()->user()->id);
                 $loadedImages = $seller->businessDocuments()->createMany($imagedata);
