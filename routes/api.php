@@ -61,7 +61,8 @@ Route::prefix('v1')->group(function(){
             Route::post('verify', 'verifyTransaction');
         });
 
-        Route::prefix('seller')->middleware('isSeller')->controller(SellerController::class)->group(function () {
+        // ->middleware('isSeller')
+        Route::prefix('seller')->controller(SellerController::class)->group(function () {
             Route::post('request-otp', 'getRegistrationCode');
             Route::post('register', 'becomeASeller');
             Route::post('account-details', 'setupAccountDetails');
@@ -71,7 +72,8 @@ Route::prefix('v1')->group(function(){
             Route::put('products/{product}/bid-offer', 'productBidOffer');
         });
 
-        Route::prefix('admin')->middleware('isAdmin')->group(function () {
+        // ->middleware('isAdmin')
+        Route::prefix('admin')->group(function () {
             Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
                 Route::get('/get-data', 'dashboardData');
             });
