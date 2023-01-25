@@ -71,7 +71,6 @@ Route::prefix('v1')->group(function(){
             Route::post('equipments/custom-specification', 'addCustomSpecification');
             Route::put('products/{product}/bid-offer', 'productBidOffer');
         });
-
         // ->middleware('isAdmin')
         Route::prefix('admin')->group(function () {
             Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {

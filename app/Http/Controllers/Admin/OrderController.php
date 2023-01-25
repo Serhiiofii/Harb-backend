@@ -25,6 +25,6 @@ class OrderController extends Controller
         $data = $request->validate([
             'search' => 'bail|required'
         ]);
-        return $this->equipmentService->search($data);
+        return $this->orderService->search($data);
     }
 }

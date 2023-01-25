@@ -226,9 +226,9 @@ class UserService
             $equipments = Equipment::where('seller_id',$id)->limit(9)->get();
             $services = Service::where('seller_id',$id)->limit(3)->get();
             return $this->success('success', 'Service details retrieved successfully', [
-                'seller' => $seller->load('user'),
+                'seller' => $seller->load('user', 'businessAccounts'),
                 'equipments' => $equipments,
-                'services' => $services
+                'services' => $services,
             ], 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
