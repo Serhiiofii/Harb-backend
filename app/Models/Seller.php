@@ -19,7 +19,7 @@ class Seller extends Model
 
     public function businessAccounts()
     {
-        return $this->hasMany(SellerBusinessAccount::class);
+        return $this->hasMany(SellerBusinessAccount::class, 'seller_id');
     }
 
     public function user()
