@@ -71,7 +71,6 @@ class HomeService
                 // dd('ss1');
                 $bidded->amount = $data['amount'];
                 $bidded->save();
-                // dd('reach');
                 $notified = $notification->notifyUser([
                     'user_id' => $productExist->seller_id,
                     'title' => 'New Bid for '.$bidded->equipment->name .'-'. $bidded->amount,
@@ -89,11 +88,11 @@ class HomeService
                 'status' => 'pending'
             ]);
 
-            $notification = new UserNotificationService();
+            // $notification = new UserNotificationService();
             $notified = $notification->notifyUser([
                 'user_id' => $productExist->seller_id,
-                'title' => 'Bid for ' . $bidded->equipment->name . '-' . $bidded->amount,
-                'description' => 'Bid for ' . $bidded->equipment->name . ' - ' . $bidded->amount . ' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name
+                'title' => 'Bid for ' . $result->equipment->name . '-' . $result->amount,
+                'description' => 'Bid for ' . $result->equipment->name . ' - ' . $result->amount . ' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name
             ]);
 
             return $this->success('success', 'Product bid sent successfully', $result->load('equipment','seller','user'), 201);
