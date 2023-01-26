@@ -29,7 +29,7 @@ class HomeService
             $most_viewed_products = Equipment::orderBy('view_count', 'desc')->skip(0)->take(6)->with('equipmentImages')->get();
 
             return $this->success('success', 'Account created successfully', [
-                'top_deals' => $top_deals,
+                'top_deals' => $top_deals->load('equipmentImages'),
                 'featured_products' => $featured_products->load('equipmentImages'),
                 'recent_sales' => $recent_sales,
                 'most_viewed_products' => $most_viewed_products,

@@ -203,7 +203,7 @@ class UserService
     {
         try {
             $saved_items = SavedItem::all();
-            return $this->success('success', 'Items retrieved successfully', $saved_items->load('equipment', 'service'), 200);
+            return $this->success('success', 'Items retrieved successfully', $saved_items->load('equipment', 'equipment.equipmentImages', 'service'), 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
@@ -227,7 +227,7 @@ class UserService
             $services = Service::where('seller_id',$id)->limit(3)->get();
             return $this->success('success', 'Service details retrieved successfully', [
                 'seller' => $seller->load('user', 'businessAccounts'),
-                'equipments' => $equipments,
+                'equipments' => $equipments->load('equipmentImages'),
                 'services' => $services,
             ], 200);
         } catch (\Exception $e) {
