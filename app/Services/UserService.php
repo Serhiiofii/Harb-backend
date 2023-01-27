@@ -169,7 +169,7 @@ class UserService
             $similar_products = Equipment::inRandomOrder()->limit(3)->get();
             $similar_services = Service::inRandomOrder()->limit(3)->get();
             return $this->success('success', 'Cart items retrieved successfully', [
-                'cart_items' => $cart_items->load('equipment', 'equipment.user.seller'),
+                'cart_items' => $cart_items->load('equipment', 'equipment.equipmentImages', 'equipment.user.seller'),
                 'similar_products' => $similar_products->load('equipmentImages'),
                 'similar_services' => $similar_services->load('seller', 'seller.user')
             ], 200);
