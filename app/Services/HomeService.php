@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\PlacedOrder;
 use App\Models\ProductBid;
 use App\Models\User;
+use App\Models\UserNotification;
 use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -60,19 +61,22 @@ class HomeService
     public function placeProductBid(array $data, $product)
     {
         try {
+            // UserNotification::truncate();
             $productExist = Equipment::where('id',$product)->first();
+            // dd($productExist);
             if($productExist == null) {
                 return $this->error('error', 'Product not found', null, 400);
             }
 
             $notification = new UserNotificationService();
             $bidded = ProductBid::where('equipment_id',$product)->first();
+            // dd($bidded);
             if($bidded != null) {
                 // dd('ss1');
                 $bidded->amount = $data['amount'];
                 $bidded->save();
                 $notified = $notification->notifyUser([
-                    'user_id' => $productExist->seller_id,
+                    'user_id' => $productExist->user_id,
                     'title' => 'New Bid for '.$bidded->equipment->name .'-'. $bidded->amount,
                     'description' => 'New Bid for '.$bidded->equipment->name.' - '.$bidded->amount.' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name
                 ]);
@@ -90,7 +94,7 @@ class HomeService
 
             // $notification = new UserNotificationService();
             $notified = $notification->notifyUser([
-                'user_id' => $productExist->seller_id,
+                'user_id' => $productExist->user_id,
                 'title' => 'Bid for ' . $result->equipment->name . '-' . $result->amount,
                 'description' => 'Bid for ' . $result->equipment->name . ' - ' . $result->amount . ' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name
             ]);
