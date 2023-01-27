@@ -16,4 +16,9 @@ class UserNotification extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+
+    public function equipment()
+    {
+        return $this->hasOne(Equipment::class, 'equipment_id');
+    }
 }

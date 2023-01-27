@@ -13,14 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_notifications', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('user_id')->index();
+        Schema::table('user_notifications', function (Blueprint $table) {
             $table->uuid('equipment_id')->nullable();
-            $table->string('title');
-            $table->string('description');
-            $table->boolean('is_read')->default(false);
-            $table->timestamps();
         });
     }
 
@@ -31,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_notifications');
+        Schema::table('user_notifications', function (Blueprint $table) {
+            //
+        });
     }
 };

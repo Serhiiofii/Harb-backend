@@ -72,11 +72,11 @@ class HomeService
             $bidded = ProductBid::where('equipment_id',$product)->first();
             // dd($bidded);
             if($bidded != null) {
-                // dd('ss1');
                 $bidded->amount = $data['amount'];
                 $bidded->save();
                 $notified = $notification->notifyUser([
                     'user_id' => $productExist->user_id,
+                    'equipment_id' => $bidded->equipment->id,
                     'title' => 'New Bid for '.$bidded->equipment->name .'-'. $bidded->amount,
                     'description' => 'New Bid for '.$bidded->equipment->name.' - '.$bidded->amount.' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name
                 ]);
