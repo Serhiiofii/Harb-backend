@@ -183,15 +183,10 @@ class SellerService
             if ($bid == null) {
                 return $this->error('error', 'Unauthorized bid', null, 400);
             }
-
-            // dd($bid->equipment->sale_type);
             $bid->status = $data['offer'] == 'approve' ? 'approved' : 'declined';
             $bid->save();
 
             if ($bid->status == 'approved') {
-                // dd('ds');
-                // dd($bid->equipment_id);
-                // dd(auth()->user()->seller->id);
                 $cartService = new CartService();
                 $res = $cartService->addToCart([
                     'user_id' => $bid->user_id,
@@ -200,15 +195,14 @@ class SellerService
                     'checkout_id' => $this->generateRandomString()
                 ]);
                 // CartItem::truncate();
-                // dd('dd');
-                // dd($res);
             }
 
             $notification = new UserNotificationService();
+            $seller_firstname = $bid->seller->user->first_name;
             $notification->notifyUser([
                 'user_id' => $bid->user_id,
                 'title' => 'Bid for ' . $bid->equipment->name . ' ' . $bid->status,
-                'description' => $bid->seller->first_name.' '.$bid->status.' your bid for '.$bid->equipment->name
+                'description' => $seller_firstname.' '.$bid->status.' your bid for '.$bid->equipment->name
             ]);
 
             $message = $data['offer'] == 'approve' ? 'Bid approved' : 'Bid declined';
