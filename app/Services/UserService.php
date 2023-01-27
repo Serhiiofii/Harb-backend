@@ -26,7 +26,7 @@ class UserService
                 return $this->error('error', 'Account not found', null, 404);
             }
 
-            return $this->success('success', null, $user, 200);
+            return $this->success('success', null, $user->seller == null ? $user:$user->load('seller'), 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
@@ -170,7 +170,7 @@ class UserService
             $similar_services = Service::inRandomOrder()->limit(3)->get();
             return $this->success('success', 'Cart items retrieved successfully', [
                 'cart_items' => $cart_items->load('equipment', 'equipment.user.seller'),
-                'similar_products' => $similar_products,
+                'similar_products' => $similar_products->load('equipmentImages'),
                 'similar_services' => $similar_services->load('seller', 'seller.user')
             ], 200);
         } catch (\Exception $e) {
