@@ -48,7 +48,7 @@ class SellerServiceService
     public function delete($id)
     {
         try {
-            $service = Service::where('id', $id)->first()->delete();
+            Service::where('id', $id)->first()->delete();
             return $this->success('success', 'Service deleted successfully', null, 200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);

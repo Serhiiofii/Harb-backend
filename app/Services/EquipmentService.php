@@ -24,8 +24,8 @@ class EquipmentService
         try {
             $equipments = Equipment::all()->load('equipmentImages');
             $total = Equipment::count();
-            $sold = Payment::where('category','equipment')->where('sale_type','sale')->count();
-            $rented = Payment::where('category','equipment')->where('sale_type','rent')->count();
+            $sold = Payment::where('category', 'equipment')->where('sale_type', 'sale')->count();
+            $rented = Payment::where('category', 'equipment')->where('sale_type', 'rent')->count();
             return $this->success('success', 'Equipment listed successfully', [
                 'equipments' => $equipments,
                 'total_equipments' => $total,
@@ -40,10 +40,10 @@ class EquipmentService
     public function deleteEquipment($id)
     {
         try {
-            $files = EquipmentImage::where('equipment_id',$id)->get();
+            $files = EquipmentImage::where('equipment_id', $id)->get();
             $customSpecs = EquipmentCustomSpecification::where('equipment_id', $id)->get();
-            if(count($customSpecs) > 0) {
-                $ids = $customSpecs->pluck('id')->primary();
+            if (count($customSpecs) > 0) {
+                $ids = $customSpecs->pluck('id');
                 EquipmentCustomSpecification::destroy($ids);
             }
 
@@ -54,6 +54,8 @@ class EquipmentService
                         File::delete(public_path($img));
                     }
                 }
+                $imageIds = $files->pluck('id');
+                EquipmentImage::destroy($imageIds);
             }
 
             Equipment::where('id', $id)->first()->delete();
@@ -62,6 +64,7 @@ class EquipmentService
             return $this->error('error', $e->getMessage(), null, 500);
         }
     }
+
 
     public function addEquipment(array $data, $request)
     {
@@ -79,10 +82,10 @@ class EquipmentService
             $notification->notifyUser([
                 'user_id' => auth()->user()->id,
                 'title' => 'Product was uploaded successfully',
-                'description' => 'Product('. $equipment->name .')was uploaded successfully'
+                'description' => 'Product(' . $equipment->name . ')was uploaded successfully'
             ]);
 
-            return $this->success('success', 'Equipment added successfully', ['equipment' => $equipment, 'equipment_images' => $loadedImages == null ? null:$loadedImages->load('equipment')], 201);
+            return $this->success('success', 'Equipment added successfully', ['equipment' => $equipment, 'equipment_images' => $loadedImages == null ? null : $loadedImages->load('equipment')], 201);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
@@ -118,10 +121,10 @@ class EquipmentService
         try {
             $result = Equipment::where('name', 'like', '%' . $data['search'] . '%')->orWhere('manufacturer', 'like', '%' . $data['search'] . '%')->orWhere('description', 'like', '%' . $data['search'] . '%')->get();
             if ($result == null) {
-                return $this->error('error', 'Account not found', null, 400);
+                return $this->error('error', 'Result not found', null, 400);
             }
 
-            return $this->success('success', 'Search successful', $result, 200);
+            return $this->success('success', 'Successful', $result, 200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }

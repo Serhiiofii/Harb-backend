@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->group(function(){
     Route::prefix('auth')->controller(AuthController::class)->group(function () {
         Route::post('register', 'register');
         Route::post('login', 'login');
@@ -26,7 +26,8 @@ Route::prefix('v1')->group(function () {
         Route::post('reset-password', 'resetPassword');
     });
 
-    Route::get('products/get-products', 'getDashboardData');
+    Route::get('products/get-products', [EquipmentController::class, 'getAll']);
+    Route::post('equipments/search', [EquipmentController::class, 'searchEquipment']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::controller(HomeController::class)->group(function () {
             Route::get('bid-notifications', 'getBids');
@@ -51,7 +52,7 @@ Route::prefix('v1')->group(function () {
             Route::get('sellers/{id}', 'getSeller');
         });
 
-        Route::prefix('messaging')->controller(MessagingController::class)->group(function () {
+        Route::prefix('messaging')->controller(MessagingController::class)->group(function() {
             Route::post('send-message', 'sendMessage');
             Route::post('chat-messages', 'userChat');
             Route::get('chat-list', 'chatListUsers');
@@ -64,7 +65,7 @@ Route::prefix('v1')->group(function () {
 
         // ->middleware('isSeller')
         Route::prefix('seller')->group(function () {
-            Route::controller(SellerController::class)->group(function () {
+            Route::controller(SellerController::class)->group(function(){
                 Route::post('request-otp', 'getRegistrationCode');
                 Route::post('register', 'becomeASeller');
                 Route::post('account-details', 'setupAccountDetails');
@@ -88,7 +89,7 @@ Route::prefix('v1')->group(function () {
                 Route::post('/create-admin', 'createAccount');
                 Route::put('/{user}/roles', 'changeAdminPermission');
             });
-            Route::prefix('users')->controller(AccountController::class)->group(function () {
+            Route::prefix('users')->controller(AccountController::class)->group(function(){
                 Route::get('/', 'listUsers');
                 Route::post('/search', 'searchUser');
                 Route::get('/{id}', 'viewUser');
@@ -123,4 +124,7 @@ Route::prefix('v1')->group(function () {
 
         // middleware('isAdmin')->
     });
+    
 });
+
+
