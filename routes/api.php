@@ -26,9 +26,9 @@ Route::prefix('v1')->group(function(){
         Route::post('reset-password', 'resetPassword');
     });
 
+    Route::get('products/get-products', 'getDashboardData');
     Route::middleware('auth:sanctum')->group(function () {
         Route::controller(HomeController::class)->group(function () {
-            Route::get('products/get-products', 'getDashboardData');
             Route::get('bid-notifications', 'getBids');
             Route::get('products/{product}', 'viewProduct');
             Route::post('products/{product}/bid', 'placeProductBid');
