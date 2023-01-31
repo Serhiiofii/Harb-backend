@@ -67,6 +67,20 @@ class SellerController extends Controller
         ]);
         return $this->sellerService->productBidOffer($data, $product);
     }
+
+    public function removeProduct($item)
+    {
+        return $this->sellerService->removeProduct($item);
+    }
+
+    public function removeService($item)
+    {
+        return $this->sellerService->removeService($item);
+    }
+
+
+
+    
     
 
 

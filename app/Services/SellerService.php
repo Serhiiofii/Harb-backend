@@ -10,10 +10,12 @@ use App\Models\ProductBid;
 use App\Models\Seller;
 use App\Models\SellerBusinessAccount;
 use App\Models\SellerDocument;
+use App\Models\Service;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use App\Traits\GenerateRandomString;
 use App\Traits\SaveImage;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class SellerService
@@ -207,6 +209,26 @@ class SellerService
 
             $message = $data['offer'] == 'approve' ? 'Bid approved' : 'Bid declined';
             return $this->success('success', $message, $bid->load('equipment', 'seller', 'user'), 200);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function removeProduct($item)
+    {
+        try {
+            Equipment::where('id', $item)->first()->delete();
+            return $this->success('success', 'Product deleted successfully', null, 200);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function removeService($item)
+    {
+        try {
+            $serviceExists = Service::where('id', $item)->first()->delete();
+            return $this->success('success', 'Service deleted successfully', null, 200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
