@@ -26,7 +26,8 @@ Route::prefix('v1')->group(function(){
         Route::post('reset-password', 'resetPassword');
     });
 
-    Route::get('products/get-products', [EquipmentController::class, 'getAll']);
+    Route::get('products/get-products', [HomeController::class, 'getDashboardData']);
+    // Route::get('products/get-products', [EquipmentController::class, 'getAll']);
     Route::post('equipments/search', [EquipmentController::class, 'searchEquipment']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::controller(HomeController::class)->group(function () {
