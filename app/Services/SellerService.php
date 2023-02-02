@@ -178,7 +178,7 @@ class SellerService
         try {
             $productExist = Equipment::where('id', $product)->first();
             if ($productExist == null) {
-                return $this->error('error', 'Product not found', null, 404);
+                return $this->error('error', 'Product not found', null, 400);
             }
 
             $bid = ProductBid::where('equipment_id', $product)->orWhere('seller_id', auth()->user()->id)->first();
