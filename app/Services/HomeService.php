@@ -76,7 +76,7 @@ class HomeService
                 $bidded->save();
                 $notified = $notification->notifyUser([
                     'user_id' => $productExist->user_id,
-                    'equipment_id' => $bidded->equipment->id,
+                    'equipment_id' => $bidded->equipment_id,
                     'title' => 'New Bid for '.$bidded->equipment->name .'-'. $bidded->amount,
                     'description' => 'New Bid for '.$bidded->equipment->name.' - '.$bidded->amount.' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name
                 ]);

@@ -180,11 +180,13 @@ class SellerService
             if ($productExist == null) {
                 return $this->error('error', 'Product not found', null, 400);
             }
+            // dd($productExist);
 
             $bid = ProductBid::where('equipment_id', $product)->orWhere('seller_id', auth()->user()->id)->first();
             if ($bid == null) {
                 return $this->error('error', 'Unauthorized bid', null, 400);
             }
+            // dd($bid);
             $bid->status = $data['offer'] == 'approve' ? 'approved' : 'declined';
             $bid->save();
 
@@ -207,7 +209,7 @@ class SellerService
                 'description' => $seller_firstname.' '.$bid->status.' your bid for '.$bid->equipment->name
             ]);
 
-            $message = $data['offer'] == 'approve' ? 'Bid approved' : 'Bid declined';
+            $message = $bid->status == 'approved' ? 'Bid approved' : 'Bid declined';
             return $this->success('success', $message, $bid->load('equipment', 'seller', 'user'), 200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
