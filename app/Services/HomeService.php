@@ -29,7 +29,7 @@ class HomeService
             $recent_sales = PlacedOrder::where('category', 'equipment')->skip(0)->take(3)->with(['equipment', 'equipment.equipmentImages'])->get();
             $most_viewed_products = Equipment::orderBy('view_count', 'desc')->skip(0)->take(6)->with('equipmentImages')->get();
 
-            return $this->success('success', 'Account created successfully', [
+            return $this->success('success', 'Successful', [
                 'top_deals' => $top_deals->load('equipmentImages'),
                 'featured_products' => $featured_products->load('equipmentImages'),
                 'recent_sales' => $recent_sales,
