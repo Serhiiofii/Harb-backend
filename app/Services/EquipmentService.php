@@ -124,7 +124,7 @@ class EquipmentService
                 return $this->error('error', 'Result not found', null, 400);
             }
 
-            return $this->success('success', 'Successful', $result, 200);
+            return $this->success('success', 'Successful', $result->load('equipmentImages'), 200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }

@@ -128,7 +128,7 @@ class SellerService
     {
         try {
             $result = Seller::where('company_name', 'like', '%' . $data['search'] . '%')->get();
-            return $this->success('success', 'Search successful', $result, 200);
+            return $this->success('success', 'Search successful', $result->load('user'), 200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
