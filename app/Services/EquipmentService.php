@@ -71,6 +71,8 @@ class EquipmentService
         try {
             $data['user_id'] = auth()->user()->id;
             $data['seller_id'] = auth()->user()->seller->id;
+            $trimmed = preg_replace('#[ -]+#', ' ', trim($data['category']));
+            $data['category'] = $trimmed;
             $equipment = Equipment::create($data);
             $loadedImages = null;
             if ($request->hasFile('images')) {
@@ -125,6 +127,26 @@ class EquipmentService
             }
 
             return $this->success('success', 'Successful', $result->load('equipmentImages'), 200);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function getCategoriesFromEquipment()
+    {
+        try {
+            $categories = Equipment::pluck('category')->unique();
+            $catArr = [];
+            foreach ($categories as $key => $value) {
+                $tempArr = [];
+                $slug = preg_replace('#[ -]+#', '-', trim($value));
+                $tempArr['category_name'] = $value;
+                $tempArr['category_slug'] = $slug;
+                $tempArr['number_of_equipments'] = Equipment::where('category',$value)->count();
+                array_push($catArr, $tempArr);
+            }
+            
+            return $this->success('success', 'Categories generated successfully', $catArr, 200);
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }

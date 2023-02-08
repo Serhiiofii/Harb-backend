@@ -27,8 +27,11 @@ Route::prefix('v1')->group(function(){
     });
 
     Route::get('products/get-products', [HomeController::class, 'getDashboardData']);
-    // Route::get('products/get-products', [EquipmentController::class, 'getAll']);
     Route::post('equipments/search', [EquipmentController::class, 'searchEquipment']);
+    Route::get('categories', [EquipmentController::class, 'getCategoriesFromEquipment']);
+
+    // Route::get('products/get-products', [EquipmentController::class, 'getAll']);
+    
     Route::middleware('auth:sanctum')->group(function () {
         Route::controller(HomeController::class)->group(function () {
             Route::get('bid-notifications', 'getBids');
@@ -63,9 +66,8 @@ Route::prefix('v1')->group(function(){
             Route::post('verify', 'verifyTransaction');
         });
 
-
-        // ->middleware('isSeller')
-        Route::prefix('seller')->group(function () {
+        // 
+        Route::prefix('seller')->middleware('isSeller')->group(function () {
             Route::controller(SellerController::class)->group(function(){
                 Route::post('request-otp', 'getRegistrationCode');
                 Route::post('register', 'becomeASeller');
@@ -80,8 +82,8 @@ Route::prefix('v1')->group(function(){
         });
 
 
-        // ->middleware('isAdmin')
-        Route::prefix('admin')->group(function () {
+    // 
+        Route::prefix('admin')->middleware('isAdmin')->group(function () {
             Route::prefix('dashboard')->controller(DashboardController::class)->group(function () {
                 Route::get('/get-data', 'dashboardData');
             });

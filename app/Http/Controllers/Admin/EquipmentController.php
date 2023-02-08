@@ -32,5 +32,9 @@ class EquipmentController extends Controller
         ]);
         return $this->equipmentService->searchEquipment($data);
     }
-    // public function 
+
+    public function getCategoriesFromEquipment()
+    {
+        return $this->equipmentService->getCategoriesFromEquipment();
+    }
 }
