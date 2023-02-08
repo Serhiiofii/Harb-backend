@@ -31,7 +31,7 @@ class AuthController extends Controller
     public function forgotPassword(Request $request)
     {
         $data = $request->validate([
-            'email' => 'bail|required|email'
+            'email' => 'bail|required|email:rfc,dns'
         ]);
         return $this->authService->forgotPassword($data);
     }
@@ -39,7 +39,7 @@ class AuthController extends Controller
     public function resetPassword(Request $request)
     {
         $data = $request->validate([
-            'email' => 'bail|required|email',
+            'email' => 'bail|required|email:rfc,dns',
             'reset_code' => 'bail|required',
             'password' => 'bail|required',
         ]);
