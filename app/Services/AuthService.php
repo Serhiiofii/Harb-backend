@@ -70,7 +70,7 @@ class AuthService
             }
 
             $user->otp = null;
-            $user->password = Hash::make($data['password']);
+            $user->password = $data['password'];
             $user->save();
             $user->tokens()->delete();
             return $this->success('success', 'Password reset successful', $user, 200);
