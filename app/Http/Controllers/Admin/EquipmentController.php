@@ -37,4 +37,9 @@ class EquipmentController extends Controller
     {
         return $this->equipmentService->getCategoriesFromEquipment();
     }
+
+    public function getEquipmentByCategory($slug)
+    {
+        return $this->equipmentService->getEquipmentByCategory($slug);
+    }
 }

@@ -151,4 +151,15 @@ class EquipmentService
             return $this->error('error', $e->getMessage(), null, 500);
         }
     }
+
+    public function getEquipmentByCategory($slug)
+    {
+        try {
+            $equipments = Equipment::where('category', $slug)->paginate(20);
+            return $this->success('success', 'Successful', $equipments->load('equipmentImages'), 200);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+
+    }
 }

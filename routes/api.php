@@ -29,6 +29,7 @@ Route::prefix('v1')->group(function(){
     Route::get('products/get-products', [HomeController::class, 'getDashboardData']);
     Route::post('equipments/search', [EquipmentController::class, 'searchEquipment']);
     Route::get('categories', [EquipmentController::class, 'getCategoriesFromEquipment']);
+    Route::get('equipment/categories/{slug}', [EquipmentController::class, 'getEquipmentByCategory']);
 
     // Route::get('products/get-products', [EquipmentController::class, 'getAll']);
     
