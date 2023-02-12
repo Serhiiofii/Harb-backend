@@ -71,8 +71,10 @@ class EquipmentService
         try {
             $data['user_id'] = auth()->user()->id;
             $data['seller_id'] = auth()->user()->seller->id;
-            $trimmed = preg_replace('#[ -]+#', ' ', trim($data['category']));
-            $data['category'] = $trimmed;
+            // dd($data['category']);
+            // $trimmed = preg_replace('#[ -]+#', ' ', trim($data['category']));
+            // dd($trimmed);
+            // $data['category'] = $trimmed;
             $equipment = Equipment::create($data);
             $loadedImages = null;
             if ($request->hasFile('images')) {
