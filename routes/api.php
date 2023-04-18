@@ -68,10 +68,12 @@ Route::prefix('v1')->group(function(){
         });
 
         // 
-        Route::prefix('seller')->middleware('isSeller')->group(function () {
+        Route::prefix('seller')->group(function () {
             Route::controller(SellerController::class)->group(function(){
                 Route::post('request-otp', 'getRegistrationCode');
                 Route::post('register', 'becomeASeller');
+            });
+            Route::controller(SellerController::class)->middleware('isSeller')->group(function(){
                 Route::post('account-details', 'setupAccountDetails');
                 Route::post('equipments/add', 'addEquipment');
                 Route::post('services/add', 'addService');
