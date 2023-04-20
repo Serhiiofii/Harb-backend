@@ -3,9 +3,9 @@
         "name": "harbourhub-1",
         "ip": "104.248.175.24",
         "username": "root",
-        "password": "",
+        "port": "22",     
         "beforeHooks": "",
         "afterHooks": "",
-        "path": "/var/www/harbourhub-api"
+        "path": "/var/www/html"
     }
 ]
