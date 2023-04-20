@@ -50,12 +50,15 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: app-build
+    - run: echo $PASSWORD | my-program-here
+      env:
+        PASSWORD: ${{secrets.SSH_PASSWORD}}
     - name: Upload
       uses: appleboy/scp-action@master
       with:
         host: ${{ matrix.server.ip }}
         username: ${{ matrix.server.username }}
-        key: ${{ secrets.SSH_KEY }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ matrix.server.port }}
         source: ${{ github.sha }}.tar.gz
         target: ${{ matrix.server.path }}/artifacts
