@@ -55,7 +55,7 @@ jobs:
       with:
         host: ${{ matrix.server.ip }}
         username: ${{ matrix.server.username }}
-        key: ${{ secrets.HARBOURHUB_API_KEY }}
+        key: ${{ secrets.KEY }}
         port: ${{ matrix.server.port }}
         source: ${{ github.sha }}.tar.gz
         target: ${{ matrix.server.path }}/artifacts
