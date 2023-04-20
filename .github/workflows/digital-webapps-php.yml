@@ -53,9 +53,9 @@ jobs:
     - name: Upload
       uses: appleboy/scp-action@master
       with:
-        host: ${{ matrix.server.ip }}
-        username: ${{ matrix.server.username }}
-        key: ${{ secrets.KEY }}
-        port: ${{ matrix.server.port }}
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
         source: ${{ github.sha }}.tar.gz
         target: ${{ matrix.server.path }}/artifacts
