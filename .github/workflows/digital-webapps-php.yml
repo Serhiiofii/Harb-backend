@@ -76,7 +76,7 @@ jobs:
         with:
           host: ${{ matrix.server.ip }}
           username: ${{ matrix.server.username }}
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.HARBOURHUB_API_KEY }}
           port: ${{ matrix.server.port }}
           envs: RELEASES_PATH
           script: |
