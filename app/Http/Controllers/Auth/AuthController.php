@@ -83,7 +83,7 @@ class AuthController extends Controller
 
         return response()->json([
             'user' => $user,
-            'access_token' => $user->createToken('google-token')->plainTextToken,
+            // 'access_token' => $user->createToken('google-token')->plainTextToken,
             'token_type' => 'Bearer',
         ]);
     }
