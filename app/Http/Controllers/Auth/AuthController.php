@@ -69,9 +69,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Invalid credentials provided.'], 422);
         }
 
-        /** @var User $user */
-        $user = User::query()
-            ->firstOrCreate(
+        $user = User::firstOrCreate(
                 [
                     'email' => $googleUser->getEmail(),
                 ],
