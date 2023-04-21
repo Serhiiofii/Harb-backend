@@ -25,8 +25,8 @@ Route::prefix('v1')->group(function(){
         Route::post('forgot-password', 'forgotPassword');
         Route::post('reset-password', 'resetPassword');
 
-        Route::post('google', 'redirectToAuth');
-        Route::post('callback', 'handleAuthCallback');
+        Route::get('google', 'redirectToAuth');
+        Route::get('callback', 'handleAuthCallback');
     });
 
     Route::get('products/get-products', [HomeController::class, 'getDashboardData']);
