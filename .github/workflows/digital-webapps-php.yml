@@ -57,6 +57,6 @@ jobs:
         username: ${{ matrix.server.username }}
         key: ${{ secrets.HARBOURHUB_API_KEY }}
         port: ${{ matrix.server.port }}
-        proxy_timeout: 120s
+        proxy_timeout: 180s
         source: ${{ github.sha }}.tar.gz
         target: ${{ matrix.server.path }}/artifacts
