@@ -13,6 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
+        \Illuminate\Support\Facades\DB::statement('SET SESSION sql_require_primary_key=0');
         Schema::create('admin_roles', function (Blueprint $table) {
             $table->uuid('id');
             $table->uuid('user_id')->index();

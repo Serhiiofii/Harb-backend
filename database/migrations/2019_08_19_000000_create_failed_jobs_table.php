@@ -13,6 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
+        \Illuminate\Support\Facades\DB::statement('SET SESSION sql_require_primary_key=0');
         Schema::create('failed_jobs', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('uuid')->unique();
