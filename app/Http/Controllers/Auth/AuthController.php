@@ -10,8 +10,6 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 use GuzzleHttp\Exception\ClientException;
-use Illuminate\Http\JsonResponse;
-use Laravel\Socialite\Contracts\User as SocialiteUser;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
@@ -53,7 +51,7 @@ class AuthController extends Controller
         return $this->authService->resetPassword($data);
     }
 
-    public function redirectToAuth(): JsonResponse
+    public function redirectToAuth()
     {
         return response()->json([
             'url' => Socialite::driver('google')
@@ -63,11 +61,10 @@ class AuthController extends Controller
         ]);
     }
 
-    public function handleAuthCallback(): JsonResponse
+    public function handleAuthCallback()
     {
         try {
-            /** @var SocialiteUser $socialiteUser */
-            $socialiteUser = Socialite::driver('google')->stateless()->user();
+            $googleUser = Socialite::driver('google')->stateless()->user();
         } catch (ClientException $e) {
             return response()->json(['error' => 'Invalid credentials provided.'], 422);
         }
@@ -76,13 +73,13 @@ class AuthController extends Controller
         $user = User::query()
             ->firstOrCreate(
                 [
-                    'email' => $socialiteUser->getEmail(),
+                    'email' => $googleUser->getEmail(),
                 ],
                 [
                     'email_verified_at' => now(),
-                    'name' => $socialiteUser->getName(),
-                    'google_id' => $socialiteUser->getId(),
-                    'avatar' => $socialiteUser->getAvatar(),
+                    'name' => $googleUser->getName(),
+                    'google_id' => $googleUser->getId(),
+                    'avatar' => $googleUser->getAvatar(),
                 ]
             );
 
