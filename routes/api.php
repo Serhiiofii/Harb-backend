@@ -24,9 +24,10 @@ Route::prefix('v1')->group(function(){
         Route::post('login', 'login');
         Route::post('forgot-password', 'forgotPassword');
         Route::post('reset-password', 'resetPassword');
+
+        Route::post('google', 'redirectToAuth');
+        Route::post('callback', 'handleAuthCallback');
     });
-    Route::get('auth/google', [AuthController::class, 'redirectToAuth']);
-    Route::get('auth/callback', [AuthController::class, 'handleAuthCallback']);
 
     Route::get('products/get-products', [HomeController::class, 'getDashboardData']);
     Route::post('equipments/search', [EquipmentController::class, 'searchEquipment']);
