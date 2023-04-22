@@ -64,7 +64,9 @@ class AuthController extends Controller
     public function handleAuthCallback()
     {
         print_r("asdfasdfasdf");
-        exit;
+        return response()->json([
+            'url' => "asdfasdfasfdasdf",
+        ]);
         // try {
         //     $googleUser = Socialite::driver('google')->stateless()->user();
         // } catch (ClientException $e) {
