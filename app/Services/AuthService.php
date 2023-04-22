@@ -79,7 +79,7 @@ class AuthService
         }
     }
     
-    public function googleAuth(array $data)
+    public function googleAuth(array $googleUser)
     {
         try {
             list($firstname, $lastname) = explode(" ", $googleUser->getName());
