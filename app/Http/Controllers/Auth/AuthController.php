@@ -71,7 +71,10 @@ class AuthController extends Controller
             return response()->json(['error' => 'Invalid credentials provided.'], 422);
         }
 
-        print_r($googleUser);
+        print_r($googleUser->getEmail());
+        print_r($googleUser->getName());
+        print_r($googleUser->getId());
+        print_r($googleUser->getAvatar());
 
         // $user = User::firstOrCreate(
         //         [
