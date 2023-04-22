@@ -63,33 +63,29 @@ class AuthController extends Controller
 
     public function handleAuthCallback()
     {
-        print_r(Socialite::driver('google')->stateless()->user());
+        try {
+            $googleUser = Socialite::driver('google')->stateless()->user();
+        } catch (ClientException $e) {
+            return response()->json(['error' => 'Invalid credentials provided.'], 422);
+        }
+
+        $user = User::firstOrCreate(
+                [
+                    'email' => $googleUser->getEmail(),
+                ],
+                [
+                    'email_verified_at' => now(),
+                    'name' => $googleUser->getName(),
+                    'google_id' => $googleUser->getId(),
+                    'avatar' => $googleUser->getAvatar(),
+                ]
+            );
+
         return response()->json([
-            'url' => "asdfasdfasfdasdf",
+            'user' => $user,
+            // 'access_token' => $user->createToken('google-token')->plainTextToken,
+            'token_type' => 'Bearer',
         ]);
-        // try {
-        //     $googleUser = Socialite::driver('google')->stateless()->user();
-        // } catch (ClientException $e) {
-        //     return response()->json(['error' => 'Invalid credentials provided.'], 422);
-        // }
-
-        // $user = User::firstOrCreate(
-        //         [
-        //             'email' => $googleUser->getEmail(),
-        //         ],
-        //         [
-        //             'email_verified_at' => now(),
-        //             'name' => $googleUser->getName(),
-        //             'google_id' => $googleUser->getId(),
-        //             'avatar' => $googleUser->getAvatar(),
-        //         ]
-        //     );
-
-        // return response()->json([
-        //     'user' => $user,
-        //     // 'access_token' => $user->createToken('google-token')->plainTextToken,
-        //     'token_type' => 'Bearer',
-        // ]);
     }
 
 }
