@@ -61,14 +61,13 @@ class AuthController extends Controller
 
     public function googleAuthCallback()
     {
-        $googleUser = null; 
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
+            
+            return $this->authService->googleAuth($googleUser);
         } catch (ClientException $e) {
             return response()->json(['error' => 'Invalid credentials provided.'], 422);
         }
-
-        return $this->authService->googleAuth($googleUser);
     }
 
 }

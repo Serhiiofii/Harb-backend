@@ -79,11 +79,11 @@ class AuthService
         }
     }
     
-    public function googleAuth(array $googleUser)
+    public function googleAuth($googleUser)
     {
         try {
             // list($firstname, $lastname) = explode(" ", $googleUser->getName());
-            print_r($googleUser);
+            print_r("asdfasdfasdfasdfasdf");
         
             // $user = User::firstOrCreate(
             //         [
