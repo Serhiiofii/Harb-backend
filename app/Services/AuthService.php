@@ -82,7 +82,8 @@ class AuthService
     public function googleAuth(array $googleUser)
     {
         try {
-            list($firstname, $lastname) = explode(" ", $googleUser->getName());
+            // list($firstname, $lastname) = explode(" ", $googleUser->getName());
+            print_r($googleUser);
         
             // $user = User::firstOrCreate(
             //         [
@@ -99,7 +100,6 @@ class AuthService
 
             // print_r($user);
 
-            $access_token = null;
             // $access_token = $user->createToken('google-token')->plainTextToken
             return $this->success('success', 'Login successful', ['token' => '', 'user' => ""], 200);
         } catch (\Exception $e) {
