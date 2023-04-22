@@ -71,26 +71,22 @@ class AuthController extends Controller
             return response()->json(['error' => 'Invalid credentials provided.'], 422);
         }
 
-        print_r($googleUser->getEmail());
-        print_r($googleUser->getName());
-        print_r($googleUser->getId());
-        print_r($googleUser->getAvatar());
-
-        // $user = User::firstOrCreate(
-        //         [
-        //             'email' => $googleUser->getEmail(),
-        //         ],
-        //         [
-        //             'email_verified_at' => now(),
-        //             'name' => $googleUser->getName(),
-        //             'google_id' => $googleUser->getId(),
-        //             'avatar' => $googleUser->getAvatar(),
-        //         ]
-        //     );
+        $user = User::firstOrCreate(
+                [
+                    'email' => $googleUser->getEmail(),
+                ],
+                [
+                    'email_verified_at' => now(),
+                    'name' => $googleUser->getName(),
+                    'google_id' => $googleUser->getId(),
+                    'avatar' => $googleUser->getAvatar(),
+                ]
+            );
+        print_r($user);
 
         return response()->json([
-            // 'user' => $user,
-            // 'access_token' => $user->createToken('google-token')->plainTextToken,
+            'user' => $user,
+            'access_token' => $user->createToken('google-token')->plainTextToken,
             'token_type' => 'Bearer',
         ]);
     }
