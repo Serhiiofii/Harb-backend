@@ -79,4 +79,33 @@ class AuthService
         }
     }
     
+    public function googleAuth(array $data)
+    {
+        try {
+            list($firstname, $lastname) = explode(" ", $googleUser->getName());
+        
+            $user = User::firstOrCreate(
+                    [
+                        'email' => $googleUser->getEmail(),
+                    ],
+                    [
+                        'email_verified_at' => now(),
+                        'first_name' => $firstname,
+                        'last_name' => $lastname,
+                        'google_id' => $googleUser->getId(),
+                        'avatar' => $googleUser->getAvatar(),
+                    ]
+                );
+
+            print_r($user);
+
+            return response()->json([
+                // 'user' => $user,
+                // 'access_token' => $user->createToken('google-token')->plainTextToken,
+                'token_type' => 'Bearer',
+            ]);
+        } catch (\Exception $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
 }

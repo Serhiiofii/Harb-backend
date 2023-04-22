@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -50,7 +49,7 @@ class AuthController extends Controller
         return $this->authService->resetPassword($data);
     }
 
-    public function redirectToAuth()
+    public function googelRedirectToAuth()
     {
         return response()->json([
             'url' => Socialite::driver('google')
@@ -60,7 +59,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function handleAuthCallback()
+    public function googleAuthCallback()
     {
         $googleUser = null; 
         try {
@@ -69,28 +68,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Invalid credentials provided.'], 422);
         }
 
-        list($firstname, $lastname) = explode(" ", $googleUser->getName());
-        
-        $user = User::firstOrCreate(
-                [
-                    'email' => $googleUser->getEmail(),
-                ],
-                [
-                    // 'email_verified_at' => now(),
-                    'first_name' => $firstname,
-                    'last_name' => $lastname,
-                    'google_id' => $googleUser->getId(),
-                    'avatar' => $googleUser->getAvatar(),
-                ]
-            );
-
-        print_r($user);
-
-        return response()->json([
-            // 'user' => $user,
-            // 'access_token' => $user->createToken('google-token')->plainTextToken,
-            'token_type' => 'Bearer',
-        ]);
+        return $this->authService->googleAuth($googleUser);
     }
 
 }
