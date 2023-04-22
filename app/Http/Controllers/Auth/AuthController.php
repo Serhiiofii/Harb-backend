@@ -72,8 +72,6 @@ class AuthController extends Controller
 
         list($firstname, $lastname) = explode(" ", $googleUser->getName());
         
-        print_r($firstname . "  <====> " . $lastname);
-
         // $user = User::firstOrCreate(
         //         [
         //             'email' => $googleUser->getEmail(),
@@ -87,7 +85,7 @@ class AuthController extends Controller
         //         ]
         //     );
 
-        // print_r($user->createToken('google-token')->plainTextToken);
+        print_r($user->createToken('google-token')->plainTextToken);
 
         return response()->json([
             // 'user' => $user,
