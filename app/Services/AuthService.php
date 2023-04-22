@@ -99,11 +99,9 @@ class AuthService
 
             print_r($user);
 
-            return response()->json([
-                // 'user' => $user,
-                // 'access_token' => $user->createToken('google-token')->plainTextToken,
-                'token_type' => 'Bearer',
-            ]);
+            $access_token = null;
+            // $access_token = $user->createToken('google-token')->plainTextToken
+            return $this->success('success', 'Login successful', ['token' => $access_token, 'user' => $user], 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
