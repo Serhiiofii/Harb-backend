@@ -84,24 +84,24 @@ class AuthService
         try {
             list($firstname, $lastname) = explode(" ", $googleUser->getName());
         
-            $user = User::firstOrCreate(
-                    [
-                        'email' => $googleUser->getEmail(),
-                    ],
-                    [
-                        'email_verified_at' => now(),
-                        'first_name' => $firstname,
-                        'last_name' => $lastname,
-                        'google_id' => $googleUser->getId(),
-                        'avatar' => $googleUser->getAvatar(),
-                    ]
-                );
+            // $user = User::firstOrCreate(
+            //         [
+            //             'email' => $googleUser->getEmail(),
+            //         ],
+            //         [
+            //             'email_verified_at' => now(),
+            //             'first_name' => $firstname,
+            //             'last_name' => $lastname,
+            //             'google_id' => $googleUser->getId(),
+            //             'avatar' => $googleUser->getAvatar(),
+            //         ]
+            //     );
 
-            print_r($user);
+            // print_r($user);
 
             $access_token = null;
             // $access_token = $user->createToken('google-token')->plainTextToken
-            return $this->success('success', 'Login successful', ['token' => $access_token, 'user' => $user], 200);
+            return $this->success('success', 'Login successful', ['token' => $access_token, 'user' => ""], 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
