@@ -77,9 +77,9 @@ class AuthController extends Controller
                     'email' => $googleUser->getEmail(),
                 ],
                 [
-                    'email_verified_at' => now(),
-                    'first_name' => $firstname,
-                    'last_name' => $lastname,
+                    // 'email_verified_at' => now(),
+                    // 'first_name' => $firstname,
+                    // 'last_name' => $lastname,
                     'google_id' => $googleUser->getId(),
                     'avatar' => $googleUser->getAvatar(),
                 ]
