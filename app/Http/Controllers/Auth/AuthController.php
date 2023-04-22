@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
-
-use App\Models\User;
 use GuzzleHttp\Exception\ClientException;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -72,6 +71,9 @@ class AuthController extends Controller
         }
 
         list($firstname, $lastname) = explode(" ", $googleUser->getName());
+        
+        print_r($firstname . "  <====> " . $lastname);
+
         $user = User::firstOrCreate(
                 [
                     'email' => $googleUser->getEmail(),
@@ -85,7 +87,7 @@ class AuthController extends Controller
                 ]
             );
 
-        print_r($user->createToken('google-token')->plainTextToken);
+        // print_r($user->createToken('google-token')->plainTextToken);
 
         return response()->json([
             // 'user' => $user,
