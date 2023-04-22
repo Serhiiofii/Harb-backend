@@ -74,18 +74,18 @@ class AuthController extends Controller
         
         print_r($firstname . "  <====> " . $lastname);
 
-        $user = User::firstOrCreate(
-                [
-                    'email' => $googleUser->getEmail(),
-                ],
-                [
-                    'email_verified_at' => now(),
-                    'first_name' => $firstname,
-                    'last_name' => $lastname,
-                    'google_id' => $googleUser->getId(),
-                    'avatar' => $googleUser->getAvatar(),
-                ]
-            );
+        // $user = User::firstOrCreate(
+        //         [
+        //             'email' => $googleUser->getEmail(),
+        //         ],
+        //         [
+        //             'email_verified_at' => now(),
+        //             'first_name' => $firstname,
+        //             'last_name' => $lastname,
+        //             'google_id' => $googleUser->getId(),
+        //             'avatar' => $googleUser->getAvatar(),
+        //         ]
+        //     );
 
         // print_r($user->createToken('google-token')->plainTextToken);
 
