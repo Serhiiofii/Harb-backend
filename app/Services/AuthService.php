@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\ForgotPassword;
+use App\Events\EmailVerify;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Carbon\Carbon;
@@ -31,8 +32,12 @@ class AuthService
                 return $this->error('error', 'Incorrect email/password', null, 400);
             }
 
+            if($user && $user->email_verified_at==null) {
+                return $this->error('error', 'Your email hasn\'t been verified', null, 400);
+            }
+
             $token = $user->createToken($data['email'])->plainTextToken;
-            $user->last_login = Carbon::today()->toDateString();
+            $user->last_login = now();
             $user->save();
 
             return $this->success('success', 'Login successful', ['token' => $token, 'user' => $user], 200);
@@ -78,7 +83,42 @@ class AuthService
             return $this->error('error', $e->getMessage(), null, 500);
         }
     }
+
+    public function changeEmail(array $data)
+    {
+        try {
+            $user = User::where('email', $data['oldEmail'])->first();
+            $user->email = $data['email'];
+            $user->otp = random_int(100000, 999999);
+            $user->save();
+
+            event(new EmailVerify($user));
+            return $this->success('success', 'Email verify code has been sent to '. $data['email'], null, 200);
+        } catch (\Exception $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
     
+    public function verifyEmail(array $data)
+    {
+        try {
+            $user = User::where('email', $data['email'])->first();
+            
+            if($user && $user->otp!=$data['verifyCode']) {
+                return $this->error('error', 'Your email verify code is Wrong', null, 400);
+            }
+
+            $token = $user->createToken($data['email'])->plainTextToken;
+            $user->last_login = now();
+            $user->save();
+            
+            event(new EmailVerify($user));
+            return $this->success('success', 'Email verify was done successfully', ['token' => $token, 'user' => $user], 200);
+        } catch (\Exception $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
     public function googleAuth($googleUser)
     {
         try {

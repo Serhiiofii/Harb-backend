@@ -49,6 +49,26 @@ class AuthController extends Controller
         return $this->authService->resetPassword($data);
     }
 
+    public function changeEmail(Request $request)
+    {
+        $data = $request->validate([
+            'email' => 'bail|required|email:rfc,dns',
+            'oldEmail' => 'bail|required|email:rfc,dns',
+        ]);
+
+        return $this->authService->changeEmail($data);
+    }
+
+    public function verifyEmail(Request $request)
+    {
+        $data = $request->validate([
+            'email' => 'bail|required|email:rfc,dns',
+            'verifyCode' => 'bail|required'
+        ]);
+
+        return $this->authService->verifyEmail($data);
+    }
+
     public function googelRedirectToAuth()
     {
         return response()->json([

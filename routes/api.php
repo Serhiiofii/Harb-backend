@@ -24,6 +24,8 @@ Route::prefix('v1')->group(function(){
         Route::post('login', 'login');
         Route::post('forgot-password', 'forgotPassword');
         Route::post('reset-password', 'resetPassword');
+        Route::post('change-email', 'changeEmail');
+        Route::post('verify-email', 'verifyEmail');
 
         Route::get('google', 'googelRedirectToAuth');
         Route::get('callback', 'googleAuthCallback');
