@@ -28,7 +28,7 @@ class EmailVerifymail
     public function handle(EmailVerify $event)
     {
         $userdata = $event->user;
-        Mail::send('emails.email-verify-code', ['data' => $userdata], function ($message) use ($userdata) {
+        Mail::send('emails.email-verify-code', ['user' => $userdata], function ($message) use ($userdata) {
             $message->from(config('mail.from.address'));
             $message->subject('Your email verification code');
             $message->to($userdata['email']);
