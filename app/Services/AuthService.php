@@ -110,6 +110,7 @@ class AuthService
 
             $token = $user->createToken($data['email'])->plainTextToken;
             $user->last_login = now();
+            $user->email_verified_at = now();
             $user->save();
             
             event(new EmailVerify($user));
