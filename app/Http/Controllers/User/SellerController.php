@@ -78,7 +78,10 @@ class SellerController extends Controller
         return $this->sellerService->removeService($item);
     }
 
-
+    public function productOrders($sellerId, $equipId)
+    {
+        return $this->sellerService->productOrders($sellerId, $equipId);
+    }
 
     
     

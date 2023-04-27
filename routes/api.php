@@ -84,6 +84,7 @@ Route::prefix('v1')->group(function(){
                 Route::post('services/add', 'addService');
                 Route::post('equipments/custom-specification', 'addCustomSpecification');
                 Route::put('products/{product}/bid-offer', 'productBidOffer');
+                Route::get('orders/{sellerId}/{equipId}', 'productOrders');
             });
             Route::delete('/equipments/{id}', [EquipmentController::class, 'deleteEquipment']);
             Route::delete('/services/{id}', [ServiceController::class, 'delete']);

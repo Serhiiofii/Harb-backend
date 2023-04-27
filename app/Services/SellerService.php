@@ -235,4 +235,16 @@ class SellerService
             return $this->error('error', $e->getMessage(), null, 500);
         }
     }
+
+    public function productOrders($sellerId, $equipId)
+    {
+        try {
+            $orders = ProductBid::where('seller_id', $sellerId)->where('equipment_id', $equipId)->get();
+            return $this->success('success', 'Getting Orders successfully', [
+                'orders' => $orders->load('user'),
+            ], 200);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
 }
