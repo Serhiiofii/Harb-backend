@@ -199,6 +199,11 @@ class SellerService
                     'checkout_id' => $this->generateRandomString()
                 ]);
                 // CartItem::truncate();
+            } else {
+                $cart_items = CartItem::where('equipment_id', $bid->equipment_id)->where('user_id', $bid->user_id)->first();
+                if ($cart_items) {
+                    $cart_items->delete();
+                }
             }
 
             $notification = new UserNotificationService();
