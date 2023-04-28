@@ -73,6 +73,16 @@ class PaymentService
     public function verifyTransaction(array $data)
     {
         try {
+            $cartItems = CartItem::where('checkout_id', $data['cart_reference_id'])->get();
+            if($cartItems->count() < 1) {
+                return $this->error('error', 'Invalid cart checkout id', null, 400);
+            }
+            
+            $duplicatePayment = Payment::where('reference',$data['paystack_reference_id'])->first();
+            if($duplicatePayment) {
+                return $this->error('error', 'Duplicate transaction error', null, 400);
+            }
+
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . config('app.paystack.secret_key')
             ])->get('https://api.paystack.co/transaction/verify/' . $data['paystack_reference_id']);
@@ -80,15 +90,6 @@ class PaymentService
             $apiResp = json_decode($response->body());
             if($apiResp->status == false) {
                 return $this->error('error',$apiResp->message,null,400);
-            }
-
-            $cartItems = CartItem::where('checkout_id', $data['cart_reference_id'])->get();
-            if($cartItems->count() < 1) {
-                return $this->error('error', 'Invalid cart checkout id', null, 400);
-            }
-            $duplicatePayment = Payment::where('reference',$data['paystack_reference_id'])->first();
-            if($duplicatePayment) {
-                return $this->error('error', 'Duplicate transaction error', null, 400);
             }
 
             $paymentDataArr = [];
