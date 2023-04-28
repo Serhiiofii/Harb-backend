@@ -178,6 +178,14 @@ class UserService
         }
     }
 
+    public function cancelCartItem($id) {
+        $cart_items = CartItem::where('id', $id)->first();
+        if ($cart_items) {
+            $cart_items->delete();
+        }
+        return $this->success('success', 'cancel successfully', null, 200);
+    }
+
     public function saveItem($id)
     {
         try {

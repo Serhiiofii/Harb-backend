@@ -54,6 +54,7 @@ Route::prefix('v1')->group(function(){
             Route::put('location', 'updateLocation');
             Route::post('update-photo', 'updateProfilePhoto');
             Route::get('cart-items', 'getCartItems');
+            Route::delete('cart-items/{id}', 'cancelCartItem');
             Route::get('saved-items', 'getSavedItems');
             Route::get('notifications', 'getNotifications');
             Route::get('notifications/{id}', 'getNotification');

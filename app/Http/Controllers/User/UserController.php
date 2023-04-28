@@ -99,7 +99,10 @@ class UserController extends Controller
         return $this->userService->getSeller($id);
     }
 
-
+    public function cancelCartItem($id)
+    {
+        return $this->userService->cancelCartItem($id);
+    }
     
     
 
