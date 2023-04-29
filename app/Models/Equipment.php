@@ -26,5 +26,9 @@ class Equipment extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function productQuote()
+    {
+        return $this->hasMany(ProductQuote::class);
+    }
 
 }

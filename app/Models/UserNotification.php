@@ -21,4 +21,9 @@ class UserNotification extends Model
     {
         return $this->hasOne(Equipment::class, 'equipment_id');
     }
+
+    public function quote()
+    {
+        return $this->belongsTo(ProductQuote::class, 'quote_id');
+    }
 }

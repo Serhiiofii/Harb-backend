@@ -7,6 +7,7 @@ use App\Models\Equipment;
 use App\Models\Payment;
 use App\Models\PlacedOrder;
 use App\Models\ProductBid;
+use App\Models\ProductQuote;
 use App\Models\User;
 use App\Models\UserNotification;
 use App\Traits\ApiResponse;
@@ -43,7 +44,11 @@ class HomeService
     public function viewEquipment($product)
     {
         try {
-            $product = Equipment::where('id', $product)->first();
+            $product = Equipment::with(['productQuote'])
+                ->where('id', $product)
+                ->whereHas("productQuote", function($subQuery){ 
+                    $subQuery->where("user_id", "=", auth()->user()->id);
+                })->first();
             if ($product == null) {
                 return $this->error('error', 'Product not found', null, 400);
             }
@@ -78,7 +83,8 @@ class HomeService
                     'user_id' => $productExist->user_id,
                     'equipment_id' => $bidded->equipment_id,
                     'title' => 'New Bid for '.$bidded->equipment->name .'-'. $bidded->amount,
-                    'description' => 'New Bid for '.$bidded->equipment->name.' - '.$bidded->amount.' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name
+                    'description' => 'New Bid for '.$bidded->equipment->name.' - '.$bidded->amount.' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name,
+                    'type' => 'bid'
                 ]);
                 // dd($notified);
                 return $this->success('success', 'New Product bid sent successfully', $bidded->load('equipment', 'seller', 'user'), 200);
@@ -115,4 +121,31 @@ class HomeService
             return $this->error('error', $e->getMessage(), null, 500);
         }
     }
+
+    public function askForQuate(array $data)
+    {
+        try {
+            $result  = ProductQuote::create([
+                'user_id' => auth()->user()->id,
+                'seller_id' => $data['seller_id'],
+                'equipment_id' => $data['equip_id'],
+                'flag'=> 'ask'
+            ]);
+
+            $notification = new UserNotificationService();
+            $product = Equipment::where('id', $data['equip_id'])->first();
+            $notified = $notification->notifyUser([
+                'user_id' => $product->user_id,
+                'title' => 'Asked for Quote - Product: ' . $product->name,
+                'description' => 'Quote has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name,
+                'equipment_id' => $product->id,
+                'quote_id' => $result->id,
+                'type' => 'quote'
+            ]);
+            return $this->success('success', 'Asked for Quote of this product successfully', $result, 200);
+        } catch (\Exception $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
 }

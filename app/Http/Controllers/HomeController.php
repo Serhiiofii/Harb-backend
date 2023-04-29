@@ -38,6 +38,13 @@ class HomeController extends Controller
         return $this->homeService->getBids();
     }
 
-
+    public function askForQuate(Request $request) 
+    {
+        $data = $request->validate([
+            'equip_id' => 'bail|required',
+            'seller_id' => 'bail|required'
+        ]);
+        return $this->homeService->askForQuate($data);
+    }
     
 }

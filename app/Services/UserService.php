@@ -144,7 +144,7 @@ class UserService
     {
         try {
             $notifications = UserNotification::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
-            return $this->success('success', 'Notifications retrieved successfully', $notifications->load('user'), 200);
+            return $this->success('success', 'Notifications retrieved successfully', $notifications->load('user', 'quote'), 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }

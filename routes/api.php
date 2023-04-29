@@ -43,6 +43,7 @@ Route::prefix('v1')->group(function(){
             Route::get('bid-notifications', 'getBids');
             Route::get('products/{product}', 'viewProduct');
             Route::post('products/{product}/bid', 'placeProductBid');
+            Route::post('products/ask', 'askForQuate');
         });
 
         Route::prefix('account')->controller(UserController::class)->group(function () {
@@ -86,6 +87,7 @@ Route::prefix('v1')->group(function(){
                 Route::post('equipments/custom-specification', 'addCustomSpecification');
                 Route::put('products/{product}/bid-offer', 'productBidOffer');
                 Route::get('orders/{sellerId}/{equipId}', 'productOrders');
+                Route::post('products/quote/{quote}', 'productQuoteOffer');
             });
             Route::delete('/equipments/{id}', [EquipmentController::class, 'deleteEquipment']);
             Route::delete('/services/{id}', [ServiceController::class, 'delete']);

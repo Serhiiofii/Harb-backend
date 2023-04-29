@@ -83,6 +83,13 @@ class SellerController extends Controller
         return $this->sellerService->productOrders($sellerId, $equipId);
     }
 
+    public function productQuoteOffer(Request $request, $quote)
+    {
+        $data = $request->validate([
+            'amount' => 'bail|required'
+        ]);
+        return $this->sellerService->productQuoteOffer($data, $quote);
+    }
     
     
 

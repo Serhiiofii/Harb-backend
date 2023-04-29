@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Models\CartItem;
 use App\Models\Equipment;
 use App\Models\ProductBid;
+use App\Models\ProductQuote;
 use App\Models\Seller;
 use App\Models\SellerBusinessAccount;
 use App\Models\SellerDocument;
@@ -248,6 +249,33 @@ class SellerService
             return $this->success('success', 'Getting Orders successfully', [
                 'orders' => $orders->load('user'),
             ], 200);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+    
+    public function productQuoteOffer(array $data, $quote) 
+    {
+        try {
+            $quote = ProductQuote::where('id',$quote)->first();
+            if($quote) {
+                $quote->amount = $data['amount'];
+                $quote->save();
+
+                $product = Equipment::where('id', $quote->equipment_id)->first();
+                $notification = new UserNotificationService();
+                $notified = $notification->notifyUser([
+                    'user_id' => $quote->user_id,
+                    'title' => "Received a Quote - Product: " . $product->name,
+                    'description' => "Received Quote You Asked Product(".$product->name.").",
+                    'equipment_id' => $product->id,
+                    'quote_id' => $quote->id,
+                    'type' => 'quote'
+                ]);
+                return $this->success('success', 'Quote Sent successfully', $quote, 200);
+            } else {
+                return $this->error('error', 'Quote doesn\'t exist', null, 400);    
+            }
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
