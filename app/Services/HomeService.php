@@ -44,11 +44,7 @@ class HomeService
     public function viewEquipment($product)
     {
         try {
-            $product = Equipment::with(['productQuote'])
-                ->where('id', $product)
-                ->whereHas("productQuote", function($subQuery){ 
-                    $subQuery->where("user_id", "=", auth()->user()->id);
-                })->first();
+            $product = Equipment::where('id', $product)->first();
             if ($product == null) {
                 return $this->error('error', 'Product not found', null, 400);
             }

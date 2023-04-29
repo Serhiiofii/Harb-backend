@@ -260,6 +260,7 @@ class SellerService
             $quote = ProductQuote::where('id',$quote)->first();
             if($quote) {
                 $quote->amount = $data['amount'];
+                $quote->flag = 'answer';
                 $quote->save();
 
                 $product = Equipment::where('id', $quote->equipment_id)->first();
