@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\ProductBid;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -20,7 +21,7 @@ class MakeBid
      * @return void
      */
     public $data;
-    public function __construct(array $data)
+    public function __construct(ProductBid $data)
     {
         $this->data = $data;
     }

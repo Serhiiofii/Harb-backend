@@ -104,7 +104,7 @@ class HomeService
                 'type' => 'bid'
             ]);
 
-            // event(new MakeBid($result->load('equipment', 'seller', 'user')));
+            event(new MakeBid($result->load('equipment', 'seller', 'user')));
             return $this->success('success', 'Product bid sent successfully', $result->load('equipment','seller','user'), 201);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
