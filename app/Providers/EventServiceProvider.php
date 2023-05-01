@@ -8,12 +8,14 @@ use App\Events\EmailVerify;
 use App\Events\AskForQuote;
 use App\Events\AnswerForQuote;
 use App\Events\MakeBid;
+use App\Events\BidApprove;
 use App\Listeners\ForgotPasswordMail;
 use App\Listeners\SellerRegistrationMail;
 use App\Listeners\EmailVerifymail;
 use App\Listeners\AskForQuoteMail;
 use App\Listeners\AnswerForQuoteMail;
 use App\Listeners\MakeBidMail;
+use App\Listeners\BidApproveMail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -47,6 +49,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         MakeBid::class => [
             MakeBidMail::class
+        ],
+        BidApprove::class => [
+            BidApproveMail::class
         ]
     ];
 

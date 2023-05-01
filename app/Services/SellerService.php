@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\SendSellerOTP;
 use App\Events\AnswerForQuote;
+use App\Events\BidApprove;
 use App\Http\Controllers\CartController;
 use App\Models\CartItem;
 use App\Models\Equipment;
@@ -192,17 +193,22 @@ class SellerService
             $bid->status = $data['offer'] == 'approve' ? 'approved' : 'declined';
             $bid->save();
 
+            $cart_items = CartItem::where('equipment_id', $bid->equipment_id)->where('user_id', $bid->user_id)->first();
             if ($bid->status == 'approved') {
-                $cartService = new CartService();
-                $res = $cartService->addToCart([
-                    'user_id' => $bid->user_id,
-                    'equipment_id' => $bid->equipment_id,
-                    'bid_amount' => $bid->amount,
-                    'checkout_id' => $this->generateRandomString()
-                ]);
+                if (!$cart_items) {
+                    $cartService = new CartService();
+                    $res = $cartService->addToCart([
+                        'user_id' => $bid->user_id,
+                        'equipment_id' => $bid->equipment_id,
+                        'bid_amount' => $bid->amount,
+                        'checkout_id' => $this->generateRandomString()
+                    ]);
+                } else {
+                    $cart_items->bid_amount = $bid->amount;
+                    $cart_items->save();
+                }
                 // CartItem::truncate();
             } else {
-                $cart_items = CartItem::where('equipment_id', $bid->equipment_id)->where('user_id', $bid->user_id)->first();
                 if ($cart_items) {
                     $cart_items->delete();
                 }
@@ -215,6 +221,14 @@ class SellerService
                 'title' => 'Bid for ' . $bid->equipment->name . ' ' . $bid->status,
                 'description' => $seller_firstname.' '.$bid->status.' your bid for '.$bid->equipment->name
             ]);
+
+            $emailData = [
+                'buyer' => $bid->user,
+                'seller' => $bid->seller,
+                'product' => $bid->equipment,
+                'bid' =>$bid
+            ];
+            event(new BidApprove($emailData));
 
             $message = $bid->status == 'approved' ? 'Bid approved' : 'Bid declined';
             return $this->success('success', $message, $bid->load('equipment', 'seller', 'user'), 200);
