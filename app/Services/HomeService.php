@@ -98,8 +98,10 @@ class HomeService
             // $notification = new UserNotificationService();
             $notified = $notification->notifyUser([
                 'user_id' => $productExist->user_id,
+                'equipment_id' => $productExist->id,
                 'title' => 'Bid for ' . $result->equipment->name . '-' . $result->amount,
-                'description' => 'Bid for ' . $result->equipment->name . ' - ' . $result->amount . ' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name
+                'description' => 'Bid for ' . $result->equipment->name . ' - ' . $result->amount . ' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name,
+                'type' => 'bid'
             ]);
             event(new MakeBid($result->load('equipment', 'seller', 'user')));
 
