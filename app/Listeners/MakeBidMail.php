@@ -30,7 +30,7 @@ class MakeBidMail
         $data = $event->data;
         Mail::send('emails.make-bid', ['data' => $data], function ($message) use ($data) {
             $message->from(config('mail.from.address'));
-            $message->subject('Bid for '.$data->equipment->name .'-'. $data->amount);
+            $message->subject('Received Bid for '.$data->equipment->name .'-'. $data->amount);
             $message->to($data->seller->company_email);
         });
     }

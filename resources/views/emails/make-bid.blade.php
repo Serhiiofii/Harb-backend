@@ -9,9 +9,9 @@
 
 <body>
     <div class="container">
-        <p>Hi {{ $data->seller->company_name }}!</p>
+        <p>Hi {{ $data['seller']->company_name }}!</p>
 
-        <p>Bid for {{ $data->equipment->name }} - {{ $data->amount }} has been placed by {{ $data->user->first_name }}</p>
+        <p>Bid for {{ $data['equipment']->name }} - {{ $data->amount }} has been placed by {{ $data['user']->first_name }}</p>
 
         <p>Please check in </b><a href="https://www.harbourhubs.com/notifications">here notification</a></b></p>
 
