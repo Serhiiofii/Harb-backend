@@ -7,11 +7,13 @@ use App\Events\SendSellerOTP;
 use App\Events\EmailVerify;
 use App\Events\AskForQuote;
 use App\Events\AnswerForQuote;
+use App\Events\MakeBid;
 use App\Listeners\ForgotPasswordMail;
 use App\Listeners\SellerRegistrationMail;
 use App\Listeners\EmailVerifymail;
 use App\Listeners\AskForQuoteMail;
 use App\Listeners\AnswerForQuoteMail;
+use App\Listeners\MakeBidMail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -42,6 +44,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         AnswerForQuote::class => [
             AnswerForQuoteMail::class
+        ],
+        MakeBid::class => [
+            MakeBidMail::class
         ]
     ];
 

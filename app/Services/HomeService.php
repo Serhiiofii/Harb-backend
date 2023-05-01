@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\AskForQuote;
+use App\Events\MakeBid;
 use App\Models\Equipment;
 use App\Models\Payment;
 use App\Models\PlacedOrder;
@@ -70,8 +71,7 @@ class HomeService
             }
 
             $notification = new UserNotificationService();
-            $bidded = ProductBid::where('equipment_id',$product)->first();
-            // dd($bidded);
+            $bidded = ProductBid::where('equipment_id',$product)->where('user_id', auth()->user()->id)->first();
             if($bidded != null) {
                 $bidded->amount = $data['amount'];
                 $bidded->save();
@@ -82,7 +82,8 @@ class HomeService
                     'description' => 'New Bid for '.$bidded->equipment->name.' - '.$bidded->amount.' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name,
                     'type' => 'bid'
                 ]);
-                // dd($notified);
+                
+                event(new MakeBid($bidded->load('equipment', 'seller', 'user')));
                 return $this->success('success', 'New Product bid sent successfully', $bidded->load('equipment', 'seller', 'user'), 200);
             }
 
@@ -100,6 +101,7 @@ class HomeService
                 'title' => 'Bid for ' . $result->equipment->name . '-' . $result->amount,
                 'description' => 'Bid for ' . $result->equipment->name . ' - ' . $result->amount . ' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name
             ]);
+            event(new MakeBid($result->load('equipment', 'seller', 'user')));
 
             return $this->success('success', 'Product bid sent successfully', $result->load('equipment','seller','user'), 201);
         } catch (\Exception $e) {
