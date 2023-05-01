@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\SendSellerOTP;
+use App\Events\AnswerForQuote;
 use App\Http\Controllers\CartController;
 use App\Models\CartItem;
 use App\Models\Equipment;
@@ -273,6 +274,14 @@ class SellerService
                     'quote_id' => $quote->id,
                     'type' => 'quote'
                 ]);
+
+                
+                $emailData = [
+                    'buyer' => $quote->load('user'),
+                    'product' => $product
+                ];
+                event(new AnswerForQuote($emailData));
+                
                 return $this->success('success', 'Quote Sent successfully', $quote, 200);
             } else {
                 return $this->error('error', 'Quote doesn\'t exist', null, 400);    

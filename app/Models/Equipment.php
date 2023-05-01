@@ -25,6 +25,11 @@ class Equipment extends Model
     {
         return $this->belongsTo(User::class);
     }
+    
+    public function seller()
+    {
+        return $this->belongsTo(Seller::class);
+    }
 
     public function productQuote()
     {

@@ -141,7 +141,7 @@ class HomeService
 
             $emailData = [
                 'buyer' => auth()->user(),
-                'product' => $product->load('user')
+                'product' => $product->load('seller')
             ];
             event(new AskForQuote($emailData));
 

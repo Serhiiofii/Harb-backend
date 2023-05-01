@@ -9,11 +9,13 @@
 
 <body>
     <div class="container">
-        <p>Hi {{ $data['product']['seller']->company_name }}!</p>
+        <p>Hi {{ $data['buyer']['user']->first_name }}!</p>
 
-        <p>{{ $data['buyer']->first_name }} are asking for quote of your product - {{ $data['product']['name'] }}</p>
+        <p>Received Quote You Asked Product - {{ $data['product']->name }}</p>
 
-        <p>To provide a Quote, Please check <b><a href="https://www.harbourhubs.com/notifications">here notification</a></b></p>
+        <p>Please check in </b><a href="https://www.harbourhubs.com/notifications">here notification</a></b></p>
+
+        <p>You can make a Bid.</p>
 
         <p>
             If you have any questions, send us an email support@harbourhubs.com.
