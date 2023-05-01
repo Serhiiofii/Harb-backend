@@ -83,7 +83,7 @@ class HomeService
                     'type' => 'bid'
                 ]);
                 
-                // event(new MakeBid($bidded->load('equipment', 'seller', 'user')));
+                event(new MakeBid($bidded->load('equipment', 'seller', 'user')));
                 return $this->success('success', 'New Product bid sent successfully', $bidded->load('equipment', 'seller', 'user'), 200);
             }
 
@@ -103,9 +103,8 @@ class HomeService
                 'description' => 'Bid for ' . $result->equipment->name . ' - ' . $result->amount . ' has been placed by ' . auth()->user()->first_name . ' ' . auth()->user()->last_name,
                 'type' => 'bid'
             ]);
-            
-            // event(new MakeBid($result->load('equipment', 'seller', 'user')));
 
+            event(new MakeBid($result->load('equipment', 'seller', 'user')));
             return $this->success('success', 'Product bid sent successfully', $result->load('equipment','seller','user'), 201);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
