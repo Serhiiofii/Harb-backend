@@ -9,7 +9,7 @@
 
 <body>
     <div class="container">
-        <p>Hi {{ $data['seller']->company_name }}!</p>
+        <p>Hi {{ $data['seller']->company_name }} company!</p>
 
         <p>Bid for {{ $data['equipment']->name }} - {{ $data->amount }} has been placed by {{ $data['user']->first_name }}</p>
 

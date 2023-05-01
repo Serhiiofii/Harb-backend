@@ -9,7 +9,7 @@
 
 <body>
     <div class="container">
-        <p>Hi {{ $data['product']['seller']->company_name }}!</p>
+        <p>Hi {{ $data['product']['seller']->company_name }} company!</p>
 
         <p>{{ $data['buyer']->first_name }} are asking for quote of your product - {{ $data['product']['name'] }}</p>
 
