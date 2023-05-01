@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Events\ForgotPassword;
+use App\Events\AskForQuote;
 use App\Models\Equipment;
 use App\Models\Payment;
 use App\Models\PlacedOrder;
@@ -138,6 +138,13 @@ class HomeService
                 'quote_id' => $result->id,
                 'type' => 'quote'
             ]);
+
+            $emailData = [
+                'buyer' => auth()->user(),
+                'product' => $product->load('user')
+            ];
+            event(new AskForQuote($emailData));
+
             return $this->success('success', 'Asked for Quote of this product successfully', $result, 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
