@@ -41,7 +41,7 @@ class EquipmentService
     public function deleteEquipment($id)
     {
         try {
-            $cart_items = CartItem::where('equipment_id', $id)->get();
+            $cart_items = CartItem::where('equipment_id', $id)->count();
             if($cart_items){
                 return $this->success('error', 'Can\'t delete this product. Offer(s) of this product is processing', null, 400);
             }
