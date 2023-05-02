@@ -45,13 +45,13 @@ class EquipmentService
             if($cart_items){
                 return $this->success('error', 'Can\'t delete this product. Offer(s) of this product is processing', null, 400);
             }
-            $files = EquipmentImage::where('equipment_id', $id)->get();
             $customSpecs = EquipmentCustomSpecification::where('equipment_id', $id)->get();
             if (count($customSpecs) > 0) {
                 $ids = $customSpecs->pluck('id');
                 EquipmentCustomSpecification::destroy($ids);
             }
-
+            
+            $files = EquipmentImage::where('equipment_id', $id)->get();
             if ($files != null) {
                 foreach ($files as $file) {
                     $img = 'images' . explode('images', $file->image)[1];
@@ -76,10 +76,6 @@ class EquipmentService
         try {
             $data['user_id'] = auth()->user()->id;
             $data['seller_id'] = auth()->user()->seller->id;
-            // dd($data['category']);
-            // $trimmed = preg_replace('#[ -]+#', ' ', trim($data['category']));
-            // dd($trimmed);
-            // $data['category'] = $trimmed;
             $equipment = Equipment::create($data);
             $loadedImages = null;
             if ($request->hasFile('images')) {
@@ -93,6 +89,43 @@ class EquipmentService
                 'title' => 'Product was uploaded successfully',
                 'description' => 'Product(' . $equipment->name . ')was uploaded successfully'
             ]);
+
+            return $this->success('success', 'Equipment added successfully', ['equipment' => $equipment, 'equipment_images' => $loadedImages == null ? null : $loadedImages->load('equipment')], 201);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
+
+    public function saveEquipment(array $data, $request)
+    {
+        try {
+            $equipment = Equipment::where('id', $data['id'])->first();
+            $equipment->name = $data['name'];
+            $equipment->description = $data['description'];
+            $equipment->category = $data['category'];
+            $equipment->manufacturer = $data['manufacturer'];
+            $equipment->equipment_specification = $data['equipment_specification'];
+            $equipment->sale_type = $data['sale_type'];
+            $equipment->user_id = auth()->user()->id;
+            $equipment->seller_id = auth()->user()->seller->id;
+            $equipment->save();
+
+            $loadedImages = null;
+            if ($request->hasFile('images')) {
+                $files = EquipmentImage::where('equipment_id', $equipment->id)->get();
+                if ($files != null) {
+                    foreach ($files as $file) {
+                        $img = 'images' . explode('images', $file->image)[1];
+                        if (File::exists(public_path($img))) {
+                            File::delete(public_path($img));
+                        }
+                    }
+                    $imageIds = $files->pluck('id');
+                    EquipmentImage::destroy($imageIds);
+                }
+                $imagedata = $this->saveImages($request->file()['images'], $equipment->id);
+                $loadedImages = $equipment->equipmentImages()->createMany($imagedata);
+            }
 
             return $this->success('success', 'Equipment added successfully', ['equipment' => $equipment, 'equipment_images' => $loadedImages == null ? null : $loadedImages->load('equipment')], 201);
         } catch (\Throwable $e) {

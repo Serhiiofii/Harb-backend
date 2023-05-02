@@ -50,6 +50,21 @@ class SellerController extends Controller
         return $this->equipmentService->addEquipment($request->validated(), $request);
     }
 
+    public function saveEquipment(Request $request)
+    {
+        $data = $request->validate([
+            'id' => 'bail|required',
+            'name' => 'bail|required|max:255',
+            'description' => 'bail|required|max:255',
+            'category' => 'bail|required',
+            'manufacturer' => 'bail|required',
+            'equipment_specification' => 'bail|required',
+            'sale_type' => 'bail|required',
+            'images[]' => 'nullable|mimes:jpeg,jpg,png',
+        ]);
+        return $this->equipmentService->saveEquipment($data, $request);
+    }
+
     public function addCustomSpecification(CustomSpecRequest $request)
     {
         return $this->equipmentService->addCustomSpecification($request->validated());

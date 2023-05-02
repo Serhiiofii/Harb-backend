@@ -83,6 +83,7 @@ Route::prefix('v1')->group(function(){
             Route::controller(SellerController::class)->middleware('isSeller')->group(function(){
                 Route::post('account-details', 'setupAccountDetails');
                 Route::post('equipments/add', 'addEquipment');
+                Route::post('equipments/save', 'saveEquipment');
                 Route::post('services/add', 'addService');
                 Route::post('equipments/custom-specification', 'addCustomSpecification');
                 Route::put('products/{product}/bid-offer', 'productBidOffer');
