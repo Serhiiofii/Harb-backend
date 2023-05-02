@@ -10,6 +10,7 @@ use App\Models\Payment;
 use App\Models\Seller;
 use App\Models\SellerDocument;
 use App\Models\User;
+use App\Models\CartItem;
 use App\Traits\ApiResponse;
 use App\Traits\SaveImage;
 use Illuminate\Support\Facades\File;
@@ -40,6 +41,10 @@ class EquipmentService
     public function deleteEquipment($id)
     {
         try {
+            $cart_items = CartItem::where('equipment_id', $id)->get();
+            if($cart_items){
+                return $this->success('error', 'Can\'t delete this product. Offer(s) of this product is processing', null, 400);
+            }
             $files = EquipmentImage::where('equipment_id', $id)->get();
             $customSpecs = EquipmentCustomSpecification::where('equipment_id', $id)->get();
             if (count($customSpecs) > 0) {
