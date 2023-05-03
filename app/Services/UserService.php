@@ -143,7 +143,7 @@ class UserService
     public function getNotifications()
     {
         try {
-            $notifications = UserNotification::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+            $notifications = UserNotification::where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->limit(20)->get();
             return $this->success('success', 'Notifications retrieved successfully', $notifications->load('user', 'quote'), 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
