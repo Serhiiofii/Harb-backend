@@ -268,6 +268,17 @@ class SellerService
             return $this->error('error', $e->getMessage(), null, 500);
         }
     }
+
+    public function productQuotes($sellerId, $equipId){
+        try {
+            $quotes = ProductQuote::where('seller_id', $sellerId)->where('equipment_id', $equipId)->get();
+            return $this->success('success', 'Getting Quotes successfully', [
+                'quotes' => $quotes->load('user'),
+            ], 200);
+        } catch (\Throwable $e) {
+            return $this->error('error', $e->getMessage(), null, 500);
+        }
+    }
     
     public function productQuoteOffer(array $data, $quote) 
     {

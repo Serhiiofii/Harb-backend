@@ -13,7 +13,7 @@
 
         <p>{{ $data['buyer']->first_name }} are asking for quote of your product - {{ $data['product']['name'] }}</p>
 
-        <p>To provide a Quote, Please check <b><a href="https://www.harbourhubs.com/notifications">here notification</a></b></p>
+        <p>To provide a Quote, Please check <b><a href="https://www.harbourhubs.com/seller/products">product pages</a></b> or <b><a href="https://www.harbourhubs.com/notifications">notification</a></b></p>
 
         <p>
             If you have any questions, send us an email support@harbourhubs.com.

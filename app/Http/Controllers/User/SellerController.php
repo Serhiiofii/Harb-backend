@@ -98,6 +98,11 @@ class SellerController extends Controller
         return $this->sellerService->productOrders($sellerId, $equipId);
     }
 
+    public function productQuotes($sellerId, $equipId)
+    {
+        return $this->sellerService->productQuotes($sellerId, $equipId);
+    }
+
     public function productQuoteOffer(Request $request, $quote)
     {
         $data = $request->validate([
