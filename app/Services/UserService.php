@@ -7,12 +7,15 @@ use App\Models\Equipment;
 use App\Models\SavedItem;
 use App\Models\Seller;
 use App\Models\Service;
+use App\Models\ProductBid;
+use App\Models\ProductQuote;
 use App\Models\User;
 use App\Models\UserNotification;
 use App\Traits\ApiResponse;
 use App\Traits\SaveImage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 class UserService
 {
@@ -233,10 +236,23 @@ class UserService
             $seller = Seller::where('id', $id)->first();
             $equipments = Equipment::where('seller_id',$id)->limit(9)->get();
             $services = Service::where('seller_id',$id)->limit(3)->get();
+            $quotesnotic = DB::table('product_quotes')
+                 ->select('equipment_id', DB::raw('count(*) as total'))
+                 ->where('flag', 'ask')->where('seller_id',$id)->limit(100)
+                 ->groupBy('equipment_id')
+                 ->get();
+            $ordersnotic = DB::table('product_bids')
+                ->select('equipment_id', DB::raw('count(*) as total'))
+                ->where('status', 'pending')->where('seller_id',$id)->limit(100)
+                ->groupBy('equipment_id')
+                ->get();
+
             return $this->success('success', 'Service details retrieved successfully', [
                 'seller' => $seller->load('user', 'businessAccounts'),
                 'equipments' => $equipments->load('equipmentImages'),
                 'services' => $services,
+                'quotesnotic' => $quotesnotic,
+                'ordersnotic' => $ordersnotic
             ], 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
