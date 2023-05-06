@@ -83,12 +83,12 @@ class EquipmentService
                 $loadedImages = $equipment->equipmentImages()->createMany($imagedata);
             }
 
-            $notification = new UserNotificationService();
-            $notification->notifyUser([
-                'user_id' => auth()->user()->id,
-                'title' => 'Product was uploaded successfully',
-                'description' => 'Product(' . $equipment->name . ')was uploaded successfully'
-            ]);
+            // $notification = new UserNotificationService();
+            // $notification->notifyUser([
+            //     'user_id' => auth()->user()->id,
+            //     'title' => 'Product was uploaded successfully',
+            //     'description' => 'Product(' . $equipment->name . ')was uploaded successfully'
+            // ]);
 
             return $this->success('success', 'Equipment added successfully', ['equipment' => $equipment, 'equipment_images' => $loadedImages == null ? null : $loadedImages->load('equipment')], 201);
         } catch (\Throwable $e) {
