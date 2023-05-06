@@ -104,7 +104,10 @@ class UserController extends Controller
         return $this->userService->cancelCartItem($id);
     }
     
-    
+    public function readNotification($id)
+    {
+        return $this->userService->readNotification($id);
+    }    
 
     
 }

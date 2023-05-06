@@ -156,8 +156,12 @@ class UserService
     public function getNotification($id)
     {
         try {
-            $notification = UserNotification::where('user_id', auth()->user()->id)->where('id', $id)->first();
-            $notification->is_read = true;
+            if($id == 'all'){
+                $notification = UserNotification::where('user_id', auth()->user()->id)->first();
+            } else {
+                $notification = UserNotification::where('user_id', auth()->user()->id)->where('id', $id)->first();
+            }
+            $notification->is_read = 1;
             $notification->save();
             return $this->success('success', 'Notification retrieved successfully', $notification->load('user'), 200);
         } catch (\Exception $e) {
