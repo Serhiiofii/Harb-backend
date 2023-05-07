@@ -260,7 +260,7 @@ class SellerService
     public function productOrders($sellerId, $equipId)
     {
         try {
-            $orders = ProductBid::where('seller_id', $sellerId)->where('equipment_id', $equipId)->get();
+            $orders = ProductBid::where('seller_id', $sellerId)->where('equipment_id', $equipId)->orderBy('created_at', 'desc')->get();
             return $this->success('success', 'Getting Orders successfully', [
                 'orders' => $orders->load('user'),
             ], 200);
@@ -271,7 +271,7 @@ class SellerService
 
     public function productQuotes($sellerId, $equipId){
         try {
-            $quotes = ProductQuote::where('seller_id', $sellerId)->where('equipment_id', $equipId)->get();
+            $quotes = ProductQuote::where('seller_id', $sellerId)->where('equipment_id', $equipId)->orderBy('created_at', 'desc')->get();
             return $this->success('success', 'Getting Quotes successfully', [
                 'quotes' => $quotes->load('user'),
             ], 200);

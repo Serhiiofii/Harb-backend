@@ -42,18 +42,23 @@ class HomeService
         }
     }
 
-    public function viewEquipment($product)
+    public function viewEquipment($id)
     {
         try {
-            $product = Equipment::where('id', $product)->first();
+            $product = Equipment::where('id', $id)->first();
             if ($product == null) {
                 return $this->error('error', 'Product not found', null, 400);
             }
 
+            $quotesAnswer = ProductQuote::where('equipment_id', $id)
+                            ->where('user_id', auth()->user()->id)
+                            ->where('flag', 'answer')
+                            ->orderBy('created_at', 'desc')->take(1)->first();
             $recent_sales = PlacedOrder::where('category', 'equipment')->skip(0)->take(6)->with(['equipment', 'equipment.equipmentImages'])->get();
-            return $this->success('success', 'Account created successfully', [
+            return $this->success('success', 'Getting Product successfully', [
                 'product' => $product->load('equipmentImages'),
                 'recent_sales' => $recent_sales,
+                'quotes_answer' => $quotesAnswer
             ], 200);
         } catch (\Exception $e) {
             return $this->error('error', $e->getMessage(), null, 500);
