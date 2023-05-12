@@ -36,7 +36,7 @@ Route::prefix('v1')->group(function(){
     Route::get('categories', [EquipmentController::class, 'getCategoriesFromEquipment']);
     Route::get('equipment/categories/{slug}', [EquipmentController::class, 'getEquipmentByCategory']);
 
-    // Route::get('products/get-products', [EquipmentController::class, 'getAll']);
+    Route::post('account/logs', [HomeController::class, 'saveLogs']);
     
     Route::middleware('auth:sanctum')->group(function () {
         Route::controller(HomeController::class)->group(function () {
