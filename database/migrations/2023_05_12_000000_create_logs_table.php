@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('browser')->nullable();
             $table->string('browser_ver')->nullable();
             $table->string('location')->nullable();
+            $table->string('timezone')->nullable();
             $table->timestamps();
         });
     }

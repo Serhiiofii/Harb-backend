@@ -36,7 +36,7 @@ Route::prefix('v1')->group(function(){
     Route::get('categories', [EquipmentController::class, 'getCategoriesFromEquipment']);
     Route::get('equipment/categories/{slug}', [EquipmentController::class, 'getEquipmentByCategory']);
 
-    Route::post('account/logs', [HomeController::class, 'saveLogs']);
+    Route::post('account/logs', [AccountController::class, 'saveLogs']);
     
     Route::middleware('auth:sanctum')->group(function () {
         Route::controller(HomeController::class)->group(function () {
@@ -108,6 +108,7 @@ Route::prefix('v1')->group(function(){
             });
             Route::prefix('users')->controller(AccountController::class)->group(function(){
                 Route::get('/', 'listUsers');
+                Route::get('/logs', 'userLogs');
                 Route::post('/search', 'searchUser');
                 Route::get('/{id}', 'viewUser');
                 Route::delete('/{id}', 'deleteUser');

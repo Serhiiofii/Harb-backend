@@ -11,6 +11,7 @@ use App\Models\Seller;
 use App\Models\SellerDocument;
 use App\Models\Service;
 use App\Models\User;
+use App\Models\Logs;
 use App\Traits\ApiResponse;
 use App\Traits\SaveImage;
 use Carbon\Carbon;
@@ -110,6 +111,24 @@ class AccountService
         } catch (\Throwable $e) {
             return $this->error('error', $e->getMessage(), null, 500);
         }
+    }
+
+    public function saveLogs($request) {
+        $result  = Logs::create([
+            'user_id' => $request->uid,
+            'ip' => $request->ip,
+            'os' => $request->os,
+            'browser' => $request->browser,
+            'browser_ver' => $request->browser_ver,
+            'location' => $request->location,
+            'timezone' => $request->timezone
+        ]);
+        return $this->success('success', 'Added a Log successfully', $result, 200);
+    }
+
+    public function getLogs() {
+        $logs = Logs::orderBy('created_at', 'DESC')->get();
+        return $this->success('success', 'Getting Logs successfully', $logs->load('user'), 200);
     }
 
 }

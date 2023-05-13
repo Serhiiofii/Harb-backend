@@ -46,9 +46,5 @@ class HomeController extends Controller
         ]);
         return $this->homeService->askForQuate($data);
     }
-
-    public function saveLogs(Request $request) {
-        return $this->homeService->saveLogs($request);
-    }
     
 }

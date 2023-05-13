@@ -37,4 +37,12 @@ class AccountController extends Controller
     {
         return $this->accountService->deleteAccount($id);
     }
+
+    public function saveLogs(Request $request) {
+        return $this->accountService->saveLogs($request);
+    }
+
+    public function userLogs() {
+        return $this->accountService->getLogs();
+    }
 }
